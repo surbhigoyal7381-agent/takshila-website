@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Takshila Admin Panel</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--red:#CC2222;--blue:#1B3DA0;--dark:#0A1A5C;--gold:#FFD700;--text:#1A2340;--gray:#6B7280;--border:#E5EAF2;--bg:#F4F7FC;--success:#10B981;--danger:#EF4444;--warning:#F59E0B;--sw:260px;}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);background:var(--bg);}
+
+/* LOGIN */
+#login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--dark) 0%,var(--blue) 100%);}
+.login-card{background:#fff;border-radius:20px;padding:48px 40px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.login-logo{text-align:center;margin-bottom:32px;}
+.login-logo img{height:56px;}
+.login-logo h1{font-size:18px;font-weight:700;color:var(--blue);margin-top:10px;}
+.login-logo p{font-size:12px;color:var(--gray);margin-top:3px;}
+.f-group{margin-bottom:18px;}
+.f-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+.f-group input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none;transition:border .3s;}
+.f-group input:focus{border-color:var(--blue);}
+.login-btn{width:100%;padding:13px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;}
+.login-btn:hover{background:#991a1a;}
+.err-msg{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;border-radius:8px;padding:9px 14px;font-size:13px;margin-bottom:14px;display:none;}
+
+/* DASHBOARD */
+#dashboard{display:none;min-height:100vh;}
+.sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--dark);display:flex;flex-direction:column;overflow-y:auto;z-index:100;}
+.sb-head{padding:22px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sb-head img{height:42px;}
+.sb-head p{color:rgba(255,255,255,.45);font-size:11px;margin-top:5px;letter-spacing:1px;text-transform:uppercase;}
+.sb-nav{padding:12px 0;flex:1;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 18px;color:rgba(255,255,255,.6);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border-left:3px solid transparent;}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.05);}
+.nav-item.active{color:#fff;background:rgba(204,34,34,.18);border-left-color:var(--red);}
+.nav-item i{width:17px;text-align:center;font-size:14px;}
+.sb-foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);}
+.logout-btn{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.5);font-size:14px;cursor:pointer;background:none;border:none;width:100%;transition:color .2s;}
+.logout-btn:hover{color:#fff;}
+.portal-sb{display:flex;align-items:center;gap:10px;color:rgba(255,215,0,.85);font-size:13px;font-weight:600;text-decoration:none;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:10px;transition:color .2s;}
+.portal-sb:hover{color:#FFD700;}
+
+.main{margin-left:var(--sw);min-height:100vh;}
+.topbar{background:#fff;padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar h2{font-size:19px;font-weight:700;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.preview-link{color:var(--blue);font-size:13px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+.content{padding:28px;}
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* CARDS & FORMS */
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;border:1px solid var(--border);}
+.card-title{font-size:15px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:9px;color:var(--text);}
+.card-title i{color:var(--red);}
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;}
+.fg input,.fg textarea,.fg select{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;font-family:inherit;color:var(--text);outline:none;transition:border .3s;background:#fff;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--blue);}
+.fg textarea{resize:vertical;min-height:80px;}
+.fg .hint{font-size:12px;color:var(--gray);margin-top:3px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.media-row{display:flex;gap:8px;margin-bottom:10px;}
+.mt-btn{padding:7px 14px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--gray);transition:all .2s;}
+.mt-btn.on{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s;text-decoration:none;font-family:inherit;}
+.btn-primary{background:var(--red);color:#fff;}
+.btn-primary:hover{background:#991a1a;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:var(--dark);}
+.btn-success{background:var(--success);color:#fff;}
+.btn-success:hover{background:#059669;}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-danger:hover{background:#dc2626;}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border);}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue);}
+.btn-warning{background:var(--warning);color:#fff;}
+.btn-sm{padding:5px 12px;font-size:13px;}
+.btn-xs{padding:4px 10px;font-size:12px;}
+.flex-end{display:flex;justify-content:flex-end;gap:10px;margin-top:10px;}
+.flex-between{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.flex-gap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+/* STATS LIST */
+.stat-row{display:flex;gap:10px;align-items:center;background:var(--bg);border-radius:8px;padding:9px 12px;margin-bottom:8px;}
+.stat-row input{flex:1;border:none;background:transparent;font-size:14px;outline:none;color:var(--text);}
+.stat-row input:first-child{font-weight:700;max-width:100px;}
+
+/* FEATURES LIST */
+.feat-row{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:7px;padding:7px 11px;margin-bottom:7px;}
+.feat-row input{flex:1;border:none;background:transparent;font-size:14px;outline:none;color:var(--text);}
+.feat-row .rm{background:none;border:none;color:var(--gray);cursor:pointer;font-size:13px;padding:2px 4px;}
+.feat-row .rm:hover{color:var(--danger);}
+
+/* RESULTS */
+.yr-tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+.yr-chip{padding:6px 15px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--gray);transition:all .2s;}
+.yr-chip.on{background:var(--blue);color:#fff;border-color:var(--blue);}
+.yr-chip.add{border-style:dashed;color:var(--blue);border-color:var(--blue);}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{text-align:left;padding:9px 11px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);background:var(--bg);border-bottom:2px solid var(--border);}
+.tbl td{padding:9px 11px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.tbl tr:hover td{background:#fafafa;}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.badge-jee{background:rgba(27,61,160,.1);color:var(--blue);}
+.badge-neet{background:rgba(16,185,129,.1);color:#059669;}
+.badge-adv{background:rgba(204,34,34,.1);color:var(--red);}
+
+/* ITEM CARDS */
+.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+.item-card{background:var(--bg);border-radius:12px;padding:16px;border:1px solid var(--border);}
+.item-thumb{width:100%;height:110px;border-radius:8px;object-fit:cover;margin-bottom:11px;background:#dde3f0;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--gray);overflow:hidden;}
+.item-thumb img,.item-thumb video{width:100%;height:100%;object-fit:cover;display:block;}
+.item-name{font-weight:700;font-size:14px;}
+.item-sub{font-size:12px;color:var(--gray);margin-top:2px;}
+.item-actions{display:flex;gap:6px;margin-top:11px;}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.overlay.open{display:flex;}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h3{font-size:16px;font-weight:700;}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--gray);}
+.modal-body{padding:22px;}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+
+/* SWITCH */
+.sw-wrap{display:flex;align-items:center;gap:10px;}
+.sw{position:relative;width:40px;height:22px;}
+.sw input{opacity:0;width:0;height:0;}
+.sl{position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:22px;transition:.3s;}
+.sl:before{position:absolute;content:'';height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+input:checked+.sl{background:var(--success);}
+input:checked+.sl:before{transform:translateX(18px);}
+
+/* TOAST */
+.toasts{position:fixed;top:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;}
+.toast{background:#fff;border-radius:10px;padding:13px 16px;box-shadow:0 8px 32px rgba(0,0,0,.15);display:flex;align-items:center;gap:11px;font-size:14px;font-weight:500;min-width:260px;border-left:4px solid var(--success);animation:tin .3s ease;}
+.toast.err{border-left-color:var(--danger);}
+.toast i{color:var(--success);}
+.toast.err i{color:var(--danger);}
+@keyframes tin{from{transform:translateX(110%);opacity:0}to{transform:none;opacity:1}}
+
+.divider{height:1px;background:var(--border);margin:20px 0;}
+.yt-preview{width:100%;aspect-ratio:16/9;border-radius:10px;border:none;margin-top:8px;}
+.empty-state{text-align:center;padding:40px 20px;color:var(--gray);}
+.empty-state i{font-size:40px;display:block;margin-bottom:12px;opacity:.4;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="FINALLOGO.png" alt="Takshila" onerror="this.style.display='none'">
+      <h1>Admin Panel</h1>
+      <p>Content Management System</p>
+    </div>
+    <div class="err-msg" id="err-msg"><i class="fas fa-exclamation-circle"></i> Invalid username or password.</div>
+    <div class="f-group"><label>Username</label><input type="text" id="un" placeholder="Enter username" value="admin"></div>
+    <div class="f-group"><label>Password</label><input type="password" id="pw" placeholder="Enter password" value="takshila@2024"></div>
+    <button class="login-btn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+    <p style="text-align:center;margin-top:14px;font-size:12px;color:var(--gray);">Default: admin / takshila@2024</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="sidebar">
+    <div class="sb-head">
+      <img src="FINALLOGO.png" alt="Takshila" onerror="this.style.display='none'">
+      <p>CMS v1.0</p>
+    </div>
+    <div class="sb-nav">
+      <div class="nav-item active" onclick="showPanel('hero')"><i class="fas fa-home"></i> Hero Section</div>
+      <div class="nav-item" onclick="showPanel('about')"><i class="fas fa-building"></i> About Us</div>
+      <div class="nav-item" onclick="showPanel('courses')"><i class="fas fa-book-open"></i> Courses</div>
+      <div class="nav-item" onclick="showPanel('results')"><i class="fas fa-trophy"></i> Results</div>
+      <div class="nav-item" onclick="showPanel('faculty')"><i class="fas fa-chalkboard-teacher"></i> Faculty</div>
+      <div class="nav-item" onclick="showPanel('gallery')"><i class="fas fa-images"></i> Gallery</div>
+      <div class="nav-item" onclick="showPanel('testimonials')"><i class="fas fa-star"></i> Testimonials</div>
+      <div class="nav-item" onclick="showPanel('settings')"><i class="fas fa-cog"></i> Settings</div>
+    </div>
+    <div class="sb-foot">
+      <a href="https://takshila-registration.web.app/" target="_blank" class="portal-sb"><i class="fas fa-user-plus"></i> Registration Portal</a>
+      <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <h2 id="panel-title">Hero Section</h2>
+      <div class="topbar-right">
+        <a href="https://takshila-registration.web.app/" target="_blank" class="preview-link" style="color:var(--success);"><i class="fas fa-user-plus"></i> Registration Portal</a>
+        <span style="color:var(--border);font-size:18px;line-height:1;">|</span>
+        <a href="https://apps.takshilajagadhri.com" target="_blank" class="preview-link" style="color:var(--blue);"><i class="fas fa-sign-in-alt"></i> Student Login</a>
+        <span style="color:var(--border);font-size:18px;line-height:1;">|</span>
+        <a href="takshila-website.html" target="_blank" class="preview-link"><i class="fas fa-eye"></i> Preview Site</a>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- HERO -->
+      <div class="panel active" id="panel-hero">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-image"></i> Background Media</div>
+          <div class="media-row">
+            <button class="mt-btn on" id="hero-mt-image" onclick="setMediaType('hero','image')">Image URL</button>
+            <button class="mt-btn" id="hero-mt-video" onclick="setMediaType('hero','video')">Video URL (MP4)</button>
+          </div>
+          <div class="fg"><input id="hero-media-url" placeholder="Paste image or video URL here..."><p class="hint">For images use any URL. For MP4 video paste direct .mp4 link.</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-heading"></i> Hero Text</div>
+          <div class="fg"><label>Badge Text</label><input id="hero-badge" placeholder="e.g. Yamuna Nagar's #1 IIT JEE & NEET Institute"></div>
+          <div class="g2">
+            <div class="fg"><label>Title Line 1</label><input id="hero-t1" placeholder="Engineering Your"></div>
+            <div class="fg"><label>Title Highlight (red)</label><input id="hero-th" placeholder="Dream IIT/NEET"></div>
+          </div>
+          <div class="fg"><label>Title Line 2</label><input id="hero-t2" placeholder="Success Since 1998"></div>
+          <div class="fg"><label>Description</label><textarea id="hero-desc"></textarea></div>
+          <div class="fg"><label>CTA Button Text</label><input id="hero-cta" placeholder="Enroll Now — Free Counselling"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-chart-bar"></i> Hero Stats</div>
+          <p style="font-size:13px;color:var(--gray);margin-bottom:12px;">Edit the 4 stat boxes shown below the description.</p>
+          <div id="hero-stats-list"></div>
+        </div>
+        <div class="flex-end"><button class="btn btn-blue" onclick="saveHero()"><i class="fas fa-save"></i> Save Hero</button></div>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="panel" id="panel-about">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-image"></i> About Media</div>
+          <div class="media-row">
+            <button class="mt-btn on" id="about-mt-image" onclick="setMediaType('about','image')">Image URL</button>
+            <button class="mt-btn" id="about-mt-video" onclick="setMediaType('about','video')">Video URL (MP4)</button>
+          </div>
+          <div class="fg"><input id="about-media-url" placeholder="Paste image or video URL..."></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-align-left"></i> About Content</div>
+          <div class="fg"><label>Section Tag</label><input id="about-tag" placeholder="About Takshila Jagadhri"></div>
+          <div class="g2">
+            <div class="fg"><label>Title</label><input id="about-title" placeholder="A Legacy of"></div>
+            <div class="fg"><label>Title Highlight (red)</label><input id="about-highlight" placeholder="Excellence"></div>
+          </div>
+          <div class="fg"><label>Title Suffix</label><input id="about-title-suffix" placeholder="in IIT JEE &amp; NEET Coaching"></div>
+          <div class="fg"><label>Paragraph 1</label><textarea id="about-p1"></textarea></div>
+          <div class="fg"><label>Paragraph 2</label><textarea id="about-p2"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-check-circle"></i> Feature Bullet Points</div>
+          <div id="about-feats-list"></div>
+          <button class="btn btn-outline btn-sm" style="margin-top:10px;" onclick="addAboutFeat()"><i class="fas fa-plus"></i> Add Feature</button>
+        </div>
+        <div class="flex-end"><button class="btn btn-blue" onclick="saveAbout()"><i class="fas fa-save"></i> Save About</button></div>
+      </div>
+
+      <!-- COURSES -->
+      <div class="panel" id="panel-courses">
+        <div class="flex-between" style="margin-bottom:16px;">
+          <span style="font-size:15px;font-weight:700;">All Courses</span>
+          <button class="btn btn-primary btn-sm" onclick="openCourseModal()"><i class="fas fa-plus"></i> Add Course</button>
+        </div>
+        <div id="courses-list"></div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="panel" id="panel-results">
+        <div class="card">
+          <div class="flex-between" style="margin-bottom:16px;">
+            <div class="yr-tabs" id="yr-tabs"></div>
+            <div class="flex-gap">
+              <button class="btn btn-outline btn-sm" onclick="addYear()"><i class="fas fa-plus"></i> Add Year</button>
+              <button class="btn btn-danger btn-sm" id="del-year-btn" onclick="deleteYear()" style="display:none"><i class="fas fa-trash"></i> Delete Year</button>
+            </div>
+          </div>
+          <div class="flex-between" style="margin-bottom:12px;">
+            <span id="yr-label" style="font-weight:700;font-size:15px;"></span>
+            <button class="btn btn-primary btn-sm" onclick="openResultModal()"><i class="fas fa-plus"></i> Add Result</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="tbl">
+              <thead><tr><th>#</th><th>Name</th><th>Exam</th><th>Score / Rank</th><th>Label</th><th>Actions</th></tr></thead>
+              <tbody id="results-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- FACULTY -->
+      <div class="panel" id="panel-faculty">
+        <div class="flex-between" style="margin-bottom:16px;">
+          <span style="font-size:15px;font-weight:700;">Faculty Members</span>
+          <button class="btn btn-primary btn-sm" onclick="openFacultyModal()"><i class="fas fa-plus"></i> Add Faculty</button>
+        </div>
+        <div class="items-grid" id="faculty-grid"></div>
+      </div>
+
+      <!-- GALLERY -->
+      <div class="panel" id="panel-gallery">
+        <div class="flex-between" style="margin-bottom:16px;">
+          <span style="font-size:15px;font-weight:700;">Gallery Items</span>
+          <button class="btn btn-primary btn-sm" onclick="openGalleryModal()"><i class="fas fa-plus"></i> Add Item</button>
+        </div>
+        <div class="items-grid" id="gallery-grid"></div>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div class="panel" id="panel-testimonials">
+        <div class="card">
+          <div class="card-title"><i class="fab fa-youtube" style="color:#FF0000;"></i> YouTube Testimonial Video</div>
+          <div class="sw-wrap" style="margin-bottom:14px;">
+            <label class="sw"><input type="checkbox" id="yt-enabled" onchange="toggleYT()"><span class="sl"></span></label>
+            <span style="font-size:14px;font-weight:600;">Enable YouTube Video Section</span>
+          </div>
+          <div id="yt-fields">
+            <div class="fg"><label>YouTube Video URL or Embed URL</label>
+              <input id="yt-url" placeholder="https://www.youtube.com/watch?v=..." oninput="previewYT()">
+              <p class="hint">Paste a YouTube watch URL or embed URL.</p>
+            </div>
+            <div id="yt-preview-wrap" style="display:none;"><iframe class="yt-preview" id="yt-iframe" allowfullscreen></iframe></div>
+          </div>
+          <div class="flex-end" style="margin-top:10px;"><button class="btn btn-blue" onclick="saveYT()"><i class="fas fa-save"></i> Save YouTube Settings</button></div>
+        </div>
+        <div class="flex-between" style="margin-bottom:14px;">
+          <span style="font-size:15px;font-weight:700;">Testimonial Cards</span>
+          <button class="btn btn-primary btn-sm" onclick="openTestimonialModal()"><i class="fas fa-plus"></i> Add Testimonial</button>
+        </div>
+        <div class="items-grid" id="testimonials-grid"></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="panel" id="panel-settings">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-lock"></i> Change Login Credentials</div>
+          <div class="g2">
+            <div class="fg"><label>New Username</label><input id="new-un" placeholder="Username"></div>
+            <div class="fg"><label>New Password</label><input type="password" id="new-pw" placeholder="Password"></div>
+          </div>
+          <div class="fg"><label>Confirm New Password</label><input type="password" id="conf-pw" placeholder="Confirm password"></div>
+          <div class="flex-end"><button class="btn btn-blue" onclick="saveCredentials()"><i class="fas fa-save"></i> Update Credentials</button></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-database"></i> Data Management</div>
+          <p style="font-size:14px;color:var(--gray);margin-bottom:16px;">All content is stored in your browser's localStorage. Use these tools to export/import or reset to defaults.</p>
+          <div class="flex-gap">
+            <button class="btn btn-outline btn-sm" onclick="exportData()"><i class="fas fa-download"></i> Export JSON</button>
+            <button class="btn btn-outline btn-sm" onclick="document.getElementById('import-file').click()"><i class="fas fa-upload"></i> Import JSON</button>
+            <button class="btn btn-danger btn-sm" onclick="resetData()"><i class="fas fa-redo"></i> Reset to Defaults</button>
+          </div>
+          <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /dashboard -->
+
+<!-- MODALS -->
+<div class="overlay" id="modal-overlay">
+  <div class="modal" id="modal-box">
+    <div class="modal-head">
+      <h3 id="modal-title">Modal</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-foot" id="modal-foot"></div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toasts" id="toasts"></div>
+
+<script>
+const KEY = 'takshila_cms';
+
+const DEFAULTS = {
+  credentials:{ username:'admin', password:'takshila@2024' },
+  hero:{
+    badge:"Yamuna Nagar's #1 IIT JEE & NEET Institute",
+    t1:'Engineering Your', th:'Dream IIT/NEET', t2:'Success Since 1998',
+    desc:"Takshila Institute Jagadhri provides world-class coaching by IITians & Gold Medalist Doctors. Small batches, personalised mentoring, and a legacy of 27+ years.",
+    mediaType:'image',
+    mediaUrl:'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=1400&q=80',
+    cta:'Enroll Now — Free Counselling',
+    stats:[{v:'25,000+',l:'Selections'},{v:'27+',l:'Years'},{v:'200+',l:'Faculty'},{v:'4.8★',l:'Rating'}]
+  },
+  about:{
+    tag:'About Takshila Jagadhri',
+    title:'A Legacy of', highlight:'Excellence', suffix:'in IIT JEE & NEET Coaching',
+    p1:"Established in 1998, Takshila Institute has been Yamuna Nagar's most trusted name for IIT JEE and NEET preparation for over 27 years. Our Jagadhri centre brings the same standard of teaching excellence that has produced 25,000+ selections across India.",
+    p2:'With a faculty of IITians and Gold Medalist Doctors, small batch sizes of 25–30 students, and a curriculum built on deep conceptual clarity, we ensure every student gets the attention and tools needed to crack India\'s toughest exams.',
+    mediaType:'image',
+    mediaUrl:'https://images.unsplash.com/photo-1562774053-701939374585?w=700&q=80',
+    features:['IITian & Doctor Faculty','Batch Size: 25–30 Students','Weekly Tests & Analysis','CCTV Monitored Campus','Daily Doubt Sessions','Parent–Teacher Meetings','Digital Library Access','Motivational Counselling']
+  },
+  courses:[
+    {id:1,tag:'ENGINEERING',tagColor:'#CC2222',title:'IIT JEE Main + Advanced',desc:'Complete preparation for JEE Main & Advanced with Physics, Chemistry and Mathematics by IITian faculty.',features:['1-year & 2-year programs','IITian faculty with 10+ years experience','Weekly full-length mock tests','NCERT + advanced problem sets','All-India Rank assessment','Personal academic counselling'],duration:'1–2 Years',headerBg:'linear-gradient(135deg,#fff5f5,#fff)'},
+    {id:2,tag:'MEDICAL',tagColor:'#10B981',title:'NEET (UG) Coaching',desc:'Rigorous NEET preparation with Biology, Physics & Chemistry by Gold Medalist Doctors and subject experts.',features:['Gold Medalist Doctor faculty','Chapter-wise test series','NCERT-focused curriculum','Regular doubt-clearing sessions','Biology diagrams & practice sets','NEET previous year analysis'],duration:'1–2 Years',headerBg:'linear-gradient(135deg,#f0fff9,#fff)'},
+    {id:3,tag:'FOUNDATION',tagColor:'#8B5CF6',title:'Foundation Course (VIII–X)',desc:'Early-stage preparation for students from Class 8 onwards, building strong fundamentals for future competitive exams.',features:['Science & Maths mastery','Olympiad preparation','NTSE / KVPY foundations','Board exam excellence','Logical reasoning training','Aptitude skill building'],duration:'1 Year / 2 Year',headerBg:'linear-gradient(135deg,#f5f3ff,#fff)'}
+  ],
+  results:{
+    '2024':[{id:1,name:'Aryan Sharma',exam:'JEE MAIN',score:'99.88%ile',detail:'JEE Main 2024'},{id:2,name:'Priya Gupta',exam:'JEE MAIN',score:'99.69%ile',detail:'JEE Main 2024'},{id:3,name:'Rahul Verma',exam:'NEET UG',score:'AIR 6',detail:'NEET UG 2024'},{id:4,name:'Sneha Kapoor',exam:'NEET UG',score:'AIR 25',detail:'NEET UG 2024'}],
+    '2023':[{id:1,name:'Vikram Singh',exam:'JEE MAIN',score:'99.72%ile',detail:'JEE Main 2023'},{id:2,name:'Anjali Mehta',exam:'JEE ADVANCED',score:'AIR 142',detail:'JEE Advanced 2023'},{id:3,name:'Rohan Dass',exam:'NEET UG',score:'AIR 18',detail:'NEET UG 2023'},{id:4,name:'Pooja Rani',exam:'NEET UG',score:'AIR 67',detail:'NEET UG 2023'}],
+    '2022':[{id:1,name:'Saurabh Goel',exam:'JEE MAIN',score:'99.54%ile',detail:'JEE Main 2022'},{id:2,name:'Nisha Thakur',exam:'JEE ADVANCED',score:'AIR 98',detail:'JEE Advanced 2022'},{id:3,name:'Kartik Bhatia',exam:'NEET UG',score:'AIR 11',detail:'NEET UG 2022'},{id:4,name:'Divya Patel',exam:'NEET UG',score:'AIR 54',detail:'NEET UG 2022'}]
+  },
+  faculty:[
+    {id:1,name:'Rajesh Kumar',subject:'Physics',qual:'IIT Delhi · B.Tech + M.Tech',exp:'15 Years',badge:'IITian',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80'},
+    {id:2,name:'Dr. Sunita Rao',subject:'Biology / NEET',qual:'AIIMS Delhi · Gold Medalist',exp:'12 Years',badge:'Gold Medalist',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=300&q=80'},
+    {id:3,name:'Amit Chauhan',subject:'Mathematics',qual:'IIT Bombay · B.Tech',exp:'18 Years',badge:'IITian',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&q=80'},
+    {id:4,name:'Pradeep Sharma',subject:'Chemistry',qual:'M.Sc Chemistry · Ph.D',exp:'20 Years',badge:'Expert',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80'}
+  ],
+  gallery:[
+    {id:1,label:'Modern Classrooms',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80'},
+    {id:2,label:'Science Labs',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1532094349884-543559612e20?w=600&q=80'},
+    {id:3,label:'Digital Library',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&q=80'},
+    {id:4,label:'Achievement Wall',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=900&q=80'},
+    {id:5,label:'Batch Activities',mediaType:'image',mediaUrl:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80'}
+  ],
+  testimonials:{
+    items:[
+      {id:1,stars:5,text:'"The faculty at Takshila Jagadhri is exceptional. They helped me not just with academics but also with career guidance. I cleared JEE Main with 99.2 percentile after joining here. The small batch size means sir gives personal attention to every student."',name:'Aarav Mehta',detail:'JEE Main 2024 · 99.2%ile',avatar:'A'},
+      {id:2,stars:5,text:'"I was a dropper and completely lost hope. Takshila\'s counselling sessions and structured crash course brought me back on track. I cleared NEET with a great rank!"',name:'Neha Yadav',detail:'NEET UG 2024 · AIR 112',avatar:'N'},
+      {id:3,stars:5,text:'"Best coaching in Jagadhri without a doubt. My son secured IIT Roorkee in his first attempt!"',name:'Vinod Kumar (Parent)',detail:'IIT Roorkee · JEE Advanced 2024',avatar:'V'}
+    ],
+    youtubeUrl:'',youtubeEnabled:false
+  }
+};
+
+let D = {}, currentYear = '', modalAction = null;
+
+/* ───── DATA ───── */
+function loadData(){
+  try{ D = JSON.parse(localStorage.getItem(KEY)) || deepCopy(DEFAULTS); }
+  catch(e){ D = deepCopy(DEFAULTS); }
+  // Merge missing keys
+  if(!D.credentials) D.credentials = deepCopy(DEFAULTS.credentials);
+  if(!D.results) D.results = deepCopy(DEFAULTS.results);
+  if(!D.testimonials) D.testimonials = deepCopy(DEFAULTS.testimonials);
+}
+function saveData(){ localStorage.setItem(KEY, JSON.stringify(D)); }
+function deepCopy(o){ return JSON.parse(JSON.stringify(o)); }
+
+/* ───── AUTH ───── */
+function doLogin(){
+  loadData();
+  const un = document.getElementById('un').value.trim();
+  const pw = document.getElementById('pw').value;
+  if(un === D.credentials.username && pw === D.credentials.password){
+    document.getElementById('login-page').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    initPanel('hero');
+  } else {
+    const el = document.getElementById('err-msg');
+    el.style.display='block';
+    setTimeout(()=>el.style.display='none', 3000);
+  }
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Enter' && document.getElementById('login-page').style.display!=='none') doLogin(); });
+function doLogout(){ document.getElementById('dashboard').style.display='none'; document.getElementById('login-page').style.display='flex'; }
+
+/* ───── PANELS ───── */
+const TITLES = {hero:'Hero Section',about:'About Us',courses:'Courses',results:'Results',faculty:'Faculty',gallery:'Gallery',testimonials:'Testimonials',settings:'Settings'};
+function showPanel(name){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{ if(n.textContent.trim().toLowerCase().includes(name.toLowerCase().split(' ')[0])) n.classList.add('active'); });
+  document.getElementById('panel-title').textContent = TITLES[name]||name;
+  initPanel(name);
+}
+function initPanel(name){
+  if(name==='hero') loadHeroForm();
+  else if(name==='about') loadAboutForm();
+  else if(name==='courses') renderCourses();
+  else if(name==='results') initResults();
+  else if(name==='faculty') renderFaculty();
+  else if(name==='gallery') renderGallery();
+  else if(name==='testimonials') renderTestimonials();
+  else if(name==='settings'){ document.getElementById('new-un').value=D.credentials.username; document.getElementById('new-pw').value=''; document.getElementById('conf-pw').value=''; }
+}
+
+/* ───── MEDIA TYPE ───── */
+function setMediaType(section, type){
+  D[section] = D[section]||{};
+  D[section].mediaType = type;
+  document.getElementById(section+'-mt-image').classList.toggle('on', type==='image');
+  document.getElementById(section+'-mt-video').classList.toggle('on', type==='video');
+}
+
+/* ───── HERO ───── */
+function loadHeroForm(){
+  const h = D.hero;
+  document.getElementById('hero-badge').value = h.badge||'';
+  document.getElementById('hero-t1').value = h.t1||'';
+  document.getElementById('hero-th').value = h.th||'';
+  document.getElementById('hero-t2').value = h.t2||'';
+  document.getElementById('hero-desc').value = h.desc||'';
+  document.getElementById('hero-cta').value = h.cta||'';
+  document.getElementById('hero-media-url').value = h.mediaUrl||'';
+  document.getElementById('hero-mt-image').classList.toggle('on', h.mediaType!=='video');
+  document.getElementById('hero-mt-video').classList.toggle('on', h.mediaType==='video');
+  const sl = document.getElementById('hero-stats-list');
+  sl.innerHTML = (h.stats||[]).map((s,i)=>`
+    <div class="stat-row">
+      <input value="${esc(s.v)}" placeholder="Value e.g. 25,000+" oninput="D.hero.stats[${i}].v=this.value">
+      <span style="color:var(--gray);font-size:13px;">→</span>
+      <input value="${esc(s.l)}" placeholder="Label e.g. Selections" oninput="D.hero.stats[${i}].l=this.value">
+    </div>`).join('');
+}
+function saveHero(){
+  D.hero.badge = document.getElementById('hero-badge').value;
+  D.hero.t1 = document.getElementById('hero-t1').value;
+  D.hero.th = document.getElementById('hero-th').value;
+  D.hero.t2 = document.getElementById('hero-t2').value;
+  D.hero.desc = document.getElementById('hero-desc').value;
+  D.hero.cta = document.getElementById('hero-cta').value;
+  D.hero.mediaUrl = document.getElementById('hero-media-url').value;
+  saveData(); toast('Hero section saved!');
+}
+
+/* ───── ABOUT ───── */
+function loadAboutForm(){
+  const a = D.about;
+  document.getElementById('about-tag').value = a.tag||'';
+  document.getElementById('about-title').value = a.title||'';
+  document.getElementById('about-highlight').value = a.highlight||'';
+  document.getElementById('about-title-suffix').value = a.suffix||'';
+  document.getElementById('about-p1').value = a.p1||'';
+  document.getElementById('about-p2').value = a.p2||'';
+  document.getElementById('about-media-url').value = a.mediaUrl||'';
+  document.getElementById('about-mt-image').classList.toggle('on', a.mediaType!=='video');
+  document.getElementById('about-mt-video').classList.toggle('on', a.mediaType==='video');
+  renderAboutFeats();
+}
+function renderAboutFeats(){
+  document.getElementById('about-feats-list').innerHTML = (D.about.features||[]).map((f,i)=>`
+    <div class="feat-row">
+      <i class="fas fa-check-circle" style="color:var(--success);font-size:13px;"></i>
+      <input value="${esc(f)}" oninput="D.about.features[${i}]=this.value">
+      <button class="rm" onclick="D.about.features.splice(${i},1);renderAboutFeats()"><i class="fas fa-times"></i></button>
+    </div>`).join('');
+}
+function addAboutFeat(){ D.about.features.push('New feature'); renderAboutFeats(); }
+function saveAbout(){
+  D.about.tag = document.getElementById('about-tag').value;
+  D.about.title = document.getElementById('about-title').value;
+  D.about.highlight = document.getElementById('about-highlight').value;
+  D.about.suffix = document.getElementById('about-title-suffix').value;
+  D.about.p1 = document.getElementById('about-p1').value;
+  D.about.p2 = document.getElementById('about-p2').value;
+  D.about.mediaUrl = document.getElementById('about-media-url').value;
+  saveData(); toast('About section saved!');
+}
+
+/* ───── COURSES ───── */
+function renderCourses(){
+  const el = document.getElementById('courses-list');
+  el.innerHTML = (D.courses||[]).map(c=>`
+    <div class="card" style="margin-bottom:14px;">
+      <div class="flex-between">
+        <div>
+          <span style="font-size:12px;font-weight:700;color:${c.tagColor||'#CC2222'};text-transform:uppercase;background:${c.tagColor||'#CC2222'}22;padding:2px 10px;border-radius:20px;">${esc(c.tag)}</span>
+          <div style="font-size:16px;font-weight:800;margin-top:6px;">${esc(c.title)}</div>
+          <div style="font-size:13px;color:var(--gray);margin-top:2px;">Duration: ${esc(c.duration)}</div>
+        </div>
+        <div class="flex-gap">
+          <button class="btn btn-outline btn-sm" onclick="openCourseModal(${c.id})"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCourse(${c.id})"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>`).join('') || '<div class="empty-state"><i class="fas fa-book-open"></i><p>No courses yet.</p></div>';
+}
+function openCourseModal(id){
+  const c = id ? D.courses.find(x=>x.id===id) : {id:Date.now(),tag:'',tagColor:'#CC2222',title:'',desc:'',features:[''],duration:'',headerBg:'linear-gradient(135deg,#fff5f5,#fff)'};
+  const isNew = !id;
+  document.getElementById('modal-title').textContent = isNew ? 'Add Course' : 'Edit Course';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="g2">
+      <div class="fg"><label>Tag</label><input id="c-tag" value="${esc(c.tag)}"></div>
+      <div class="fg"><label>Tag Color</label><input type="color" id="c-color" value="${c.tagColor||'#CC2222'}" style="height:40px;width:100%;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;"></div>
+    </div>
+    <div class="fg"><label>Title</label><input id="c-title" value="${esc(c.title)}"></div>
+    <div class="fg"><label>Description</label><textarea id="c-desc">${esc(c.desc)}</textarea></div>
+    <div class="fg"><label>Duration</label><input id="c-dur" value="${esc(c.duration)}"></div>
+    <div class="fg"><label>Features (one per line)</label><textarea id="c-feats" style="min-height:120px;">${(c.features||[]).join('\n')}</textarea></div>`;
+  document.getElementById('modal-foot').innerHTML = `
+    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-blue" onclick="saveCourse(${c.id},${isNew})"><i class="fas fa-save"></i> Save</button>`;
+  openModal();
+}
+function saveCourse(id, isNew){
+  const obj = {
+    id, tag:document.getElementById('c-tag').value, tagColor:document.getElementById('c-color').value,
+    title:document.getElementById('c-title').value, desc:document.getElementById('c-desc').value,
+    duration:document.getElementById('c-dur').value,
+    features:document.getElementById('c-feats').value.split('\n').filter(Boolean),
+    headerBg:'linear-gradient(135deg,#fff5f5,#fff)'
+  };
+  if(isNew) D.courses.push(obj);
+  else { const i = D.courses.findIndex(x=>x.id===id); if(i>=0) D.courses[i]=obj; }
+  saveData(); closeModal(); renderCourses(); toast('Course saved!');
+}
+function deleteCourse(id){
+  if(!confirm('Delete this course?')) return;
+  D.courses = D.courses.filter(x=>x.id!==id);
+  saveData(); renderCourses(); toast('Course deleted.');
+}
+
+/* ───── RESULTS ───── */
+function initResults(){
+  const years = Object.keys(D.results||{}).sort((a,b)=>b-a);
+  if(years.length && !currentYear) currentYear = years[0];
+  renderYearTabs(); renderResultsTable();
+}
+function renderYearTabs(){
+  const years = Object.keys(D.results||{}).sort((a,b)=>b-a);
+  document.getElementById('yr-tabs').innerHTML = years.map(y=>`
+    <div class="yr-chip${y===currentYear?' on':''}" onclick="selectYear('${y}')">${y}</div>`).join('');
+  document.getElementById('yr-label').textContent = currentYear ? `Results for ${currentYear}` : 'Select a year';
+  document.getElementById('del-year-btn').style.display = currentYear ? '' : 'none';
+}
+function selectYear(y){ currentYear = y; renderYearTabs(); renderResultsTable(); }
+function renderResultsTable(){
+  const rows = (D.results[currentYear]||[]);
+  const badgeClass = e => e.includes('NEET') ? 'badge-neet' : e.includes('ADVANCED') ? 'badge-adv' : 'badge-jee';
+  document.getElementById('results-tbody').innerHTML = rows.length ? rows.map((r,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td style="font-weight:600;">${esc(r.name)}</td>
+      <td><span class="badge ${badgeClass(r.exam)}">${esc(r.exam)}</span></td>
+      <td style="font-weight:800;color:var(--blue);">${esc(r.score)}</td>
+      <td style="color:var(--gray);font-size:13px;">${esc(r.detail)}</td>
+      <td>
+        <div class="flex-gap">
+          <button class="btn btn-outline btn-xs" onclick="openResultModal(${r.id})"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-danger btn-xs" onclick="deleteResult(${r.id})"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`).join('')
+    : '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gray);">No results for this year.</td></tr>';
+}
+function addYear(){
+  const y = prompt('Enter year (e.g. 2021):');
+  if(!y || !/^\d{4}$/.test(y.trim())) return;
+  if(D.results[y.trim()]) return toast('Year already exists.','err');
+  D.results[y.trim()] = [];
+  currentYear = y.trim();
+  saveData(); initResults(); toast('Year '+y+' added!');
+}
+function deleteYear(){
+  if(!currentYear || !confirm(`Delete all results for ${currentYear}?`)) return;
+  delete D.results[currentYear];
+  const years = Object.keys(D.results).sort((a,b)=>b-a);
+  currentYear = years[0]||'';
+  saveData(); initResults(); toast('Year deleted.');
+}
+function openResultModal(id){
+  const r = id ? (D.results[currentYear]||[]).find(x=>x.id===id) : {id:Date.now(),name:'',exam:'JEE MAIN',score:'',detail:''};
+  const isNew = !id;
+  document.getElementById('modal-title').textContent = isNew ? 'Add Result' : 'Edit Result';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="fg"><label>Student Name</label><input id="r-name" value="${esc(r.name)}"></div>
+    <div class="g2">
+      <div class="fg"><label>Exam Type</label>
+        <select id="r-exam">
+          ${['JEE MAIN','JEE ADVANCED','NEET UG'].map(e=>`<option${r.exam===e?' selected':''}>${e}</option>`).join('')}
+        </select>
+      </div>
+      <div class="fg"><label>Score / Rank</label><input id="r-score" value="${esc(r.score)}" placeholder="99.88%ile or AIR 6"></div>
+    </div>
+    <div class="fg"><label>Display Label</label><input id="r-detail" value="${esc(r.detail)}" placeholder="JEE Main 2024"></div>`;
+  document.getElementById('modal-foot').innerHTML = `
+    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-blue" onclick="saveResult(${r.id},${isNew})"><i class="fas fa-save"></i> Save</button>`;
+  openModal();
+}
+function saveResult(id, isNew){
+  const obj = { id, name:document.getElementById('r-name').value, exam:document.getElementById('r-exam').value, score:document.getElementById('r-score').value, detail:document.getElementById('r-detail').value };
+  if(!D.results[currentYear]) D.results[currentYear]=[];
+  if(isNew) D.results[currentYear].push(obj);
+  else { const i = D.results[currentYear].findIndex(x=>x.id===id); if(i>=0) D.results[currentYear][i]=obj; }
+  saveData(); closeModal(); renderResultsTable(); toast('Result saved!');
+}
+function deleteResult(id){
+  if(!confirm('Delete this result?')) return;
+  D.results[currentYear] = D.results[currentYear].filter(x=>x.id!==id);
+  saveData(); renderResultsTable(); toast('Result deleted.');
+}
+
+/* ───── FACULTY ───── */
+function renderFaculty(){
+  const el = document.getElementById('faculty-grid');
+  el.innerHTML = (D.faculty||[]).map(f=>`
+    <div class="item-card">
+      <div class="item-thumb">${f.mediaUrl ? `<img src="${esc(f.mediaUrl)}" alt="${esc(f.name)}" onerror="this.parentElement.innerHTML='<i class=&quot;fas fa-user&quot;></i>'">` : '<i class="fas fa-user"></i>'}</div>
+      <div class="item-name">${esc(f.name)}</div>
+      <div class="item-sub">${esc(f.subject)} · ${esc(f.badge)}</div>
+      <div class="item-sub">${esc(f.exp)} experience</div>
+      <div class="item-actions">
+        <button class="btn btn-outline btn-xs" onclick="openFacultyModal(${f.id})"><i class="fas fa-edit"></i> Edit</button>
+        <button class="btn btn-danger btn-xs" onclick="deleteFaculty(${f.id})"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('') || '<div class="empty-state"><i class="fas fa-chalkboard-teacher"></i><p>No faculty yet.</p></div>';
+}
+function openFacultyModal(id){
+  const f = id ? D.faculty.find(x=>x.id===id) : {id:Date.now(),name:'',subject:'',qual:'',exp:'',badge:'',mediaType:'image',mediaUrl:''};
+  const isNew = !id;
+  document.getElementById('modal-title').textContent = isNew ? 'Add Faculty' : 'Edit Faculty';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="g2">
+      <div class="fg"><label>Name</label><input id="f-name" value="${esc(f.name)}"></div>
+      <div class="fg"><label>Subject</label><input id="f-subj" value="${esc(f.subject)}"></div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label>Qualification</label><input id="f-qual" value="${esc(f.qual)}"></div>
+      <div class="fg"><label>Experience</label><input id="f-exp" value="${esc(f.exp)}" placeholder="15 Years"></div>
+    </div>
+    <div class="fg"><label>Badge (IITian / Gold Medalist / Expert)</label><input id="f-badge" value="${esc(f.badge)}"></div>
+    <div class="fg"><label>Media Type</label>
+      <div class="media-row">
+        <button class="mt-btn${f.mediaType!=='video'?' on':''}" id="fm-img" onclick="this.classList.add('on');document.getElementById('fm-vid').classList.remove('on');">Image</button>
+        <button class="mt-btn${f.mediaType==='video'?' on':''}" id="fm-vid" onclick="this.classList.add('on');document.getElementById('fm-img').classList.remove('on');">Video (MP4)</button>
+      </div>
+    </div>
+    <div class="fg"><label>Image / Video URL</label><input id="f-url" value="${esc(f.mediaUrl)}" placeholder="Paste URL..."></div>`;
+  document.getElementById('modal-foot').innerHTML = `
+    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-blue" onclick="saveFaculty(${f.id},${isNew})"><i class="fas fa-save"></i> Save</button>`;
+  openModal();
+}
+function saveFaculty(id, isNew){
+  const mt = document.getElementById('fm-vid').classList.contains('on') ? 'video' : 'image';
+  const obj = {id, name:document.getElementById('f-name').value, subject:document.getElementById('f-subj').value, qual:document.getElementById('f-qual').value, exp:document.getElementById('f-exp').value, badge:document.getElementById('f-badge').value, mediaType:mt, mediaUrl:document.getElementById('f-url').value};
+  if(isNew) D.faculty.push(obj);
+  else { const i = D.faculty.findIndex(x=>x.id===id); if(i>=0) D.faculty[i]=obj; }
+  saveData(); closeModal(); renderFaculty(); toast('Faculty saved!');
+}
+function deleteFaculty(id){
+  if(!confirm('Remove this faculty member?')) return;
+  D.faculty = D.faculty.filter(x=>x.id!==id);
+  saveData(); renderFaculty(); toast('Faculty removed.');
+}
+
+/* ───── GALLERY ───── */
+function renderGallery(){
+  const el = document.getElementById('gallery-grid');
+  el.innerHTML = (D.gallery||[]).map(g=>`
+    <div class="item-card">
+      <div class="item-thumb">${g.mediaType==='video'
+        ? `<video src="${esc(g.mediaUrl)}" muted style="width:100%;height:100%;object-fit:cover;"></video>`
+        : `<img src="${esc(g.mediaUrl)}" alt="${esc(g.label)}" onerror="this.parentElement.innerHTML='<i class=&quot;fas fa-image&quot;></i>'">`}
+      </div>
+      <div class="item-name">${esc(g.label)}</div>
+      <div class="item-sub">${g.mediaType==='video' ? '🎬 Video' : '🖼️ Image'}</div>
+      <div class="item-actions">
+        <button class="btn btn-outline btn-xs" onclick="openGalleryModal(${g.id})"><i class="fas fa-edit"></i> Edit</button>
+        <button class="btn btn-danger btn-xs" onclick="deleteGallery(${g.id})"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('') || '<div class="empty-state"><i class="fas fa-images"></i><p>No gallery items yet.</p></div>';
+}
+function openGalleryModal(id){
+  const g = id ? D.gallery.find(x=>x.id===id) : {id:Date.now(),label:'',mediaType:'image',mediaUrl:''};
+  const isNew = !id;
+  document.getElementById('modal-title').textContent = isNew ? 'Add Gallery Item' : 'Edit Gallery Item';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="fg"><label>Label</label><input id="g-label" value="${esc(g.label)}"></div>
+    <div class="fg"><label>Media Type</label>
+      <div class="media-row">
+        <button class="mt-btn${g.mediaType!=='video'?' on':''}" id="gm-img" onclick="this.classList.add('on');document.getElementById('gm-vid').classList.remove('on');">Image</button>
+        <button class="mt-btn${g.mediaType==='video'?' on':''}" id="gm-vid" onclick="this.classList.add('on');document.getElementById('gm-img').classList.remove('on');">Video (MP4)</button>
+      </div>
+    </div>
+    <div class="fg"><label>Image / Video URL</label><input id="g-url" value="${esc(g.mediaUrl)}" placeholder="Paste URL..."></div>`;
+  document.getElementById('modal-foot').innerHTML = `
+    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-blue" onclick="saveGallery(${g.id},${isNew})"><i class="fas fa-save"></i> Save</button>`;
+  openModal();
+}
+function saveGallery(id, isNew){
+  const mt = document.getElementById('gm-vid').classList.contains('on') ? 'video' : 'image';
+  const obj = {id, label:document.getElementById('g-label').value, mediaType:mt, mediaUrl:document.getElementById('g-url').value};
+  if(isNew) D.gallery.push(obj);
+  else { const i = D.gallery.findIndex(x=>x.id===id); if(i>=0) D.gallery[i]=obj; }
+  saveData(); closeModal(); renderGallery(); toast('Gallery item saved!');
+}
+function deleteGallery(id){
+  if(!confirm('Remove this gallery item?')) return;
+  D.gallery = D.gallery.filter(x=>x.id!==id);
+  saveData(); renderGallery(); toast('Gallery item removed.');
+}
+
+/* ───── TESTIMONIALS ───── */
+function renderTestimonials(){
+  const t = D.testimonials;
+  document.getElementById('yt-enabled').checked = t.youtubeEnabled||false;
+  document.getElementById('yt-url').value = t.youtubeUrl||'';
+  document.getElementById('yt-fields').style.opacity = t.youtubeEnabled ? '1' : '.5';
+  if(t.youtubeUrl) previewYT();
+  const el = document.getElementById('testimonials-grid');
+  el.innerHTML = (t.items||[]).map(x=>`
+    <div class="item-card">
+      <div style="font-size:22px;font-weight:800;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:10px;">${esc(x.avatar||x.name[0])}</div>
+      <div class="item-name">${esc(x.name)}</div>
+      <div class="item-sub">${esc(x.detail)}</div>
+      <div style="font-size:12px;color:var(--gray);margin-top:6px;line-height:1.5;">${esc(x.text.substring(0,80))}...</div>
+      <div class="item-actions">
+        <button class="btn btn-outline btn-xs" onclick="openTestimonialModal(${x.id})"><i class="fas fa-edit"></i> Edit</button>
+        <button class="btn btn-danger btn-xs" onclick="deleteTestimonial(${x.id})"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('') || '<div class="empty-state"><i class="fas fa-star"></i><p>No testimonials yet.</p></div>';
+}
+function toggleYT(){
+  D.testimonials.youtubeEnabled = document.getElementById('yt-enabled').checked;
+  document.getElementById('yt-fields').style.opacity = D.testimonials.youtubeEnabled ? '1' : '.5';
+}
+function previewYT(){
+  const url = document.getElementById('yt-url').value;
+  const embed = ytEmbed(url);
+  const wrap = document.getElementById('yt-preview-wrap');
+  if(embed){ document.getElementById('yt-iframe').src = embed; wrap.style.display='block'; }
+  else wrap.style.display='none';
+}
+function ytEmbed(url){
+  if(!url) return '';
+  let id = '';
+  const m1 = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  const m2 = url.match(/youtube\.com\/embed\/([^?&\s]+)/);
+  if(m1) id = m1[1]; else if(m2) id = m2[1];
+  return id ? `https://www.youtube.com/embed/${id}` : '';
+}
+function saveYT(){
+  D.testimonials.youtubeUrl = document.getElementById('yt-url').value;
+  D.testimonials.youtubeEnabled = document.getElementById('yt-enabled').checked;
+  saveData(); toast('YouTube settings saved!');
+}
+function openTestimonialModal(id){
+  const t = id ? D.testimonials.items.find(x=>x.id===id) : {id:Date.now(),stars:5,text:'',name:'',detail:'',avatar:''};
+  const isNew = !id;
+  document.getElementById('modal-title').textContent = isNew ? 'Add Testimonial' : 'Edit Testimonial';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="g2">
+      <div class="fg"><label>Name</label><input id="t-name" value="${esc(t.name)}"></div>
+      <div class="fg"><label>Detail (e.g. JEE 2024 · 99%ile)</label><input id="t-detail" value="${esc(t.detail)}"></div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label>Avatar Letter</label><input id="t-avatar" value="${esc(t.avatar||t.name?.[0]||'')}" maxlength="2"></div>
+      <div class="fg"><label>Stars (1–5)</label><input type="number" id="t-stars" value="${t.stars||5}" min="1" max="5"></div>
+    </div>
+    <div class="fg"><label>Testimonial Text</label><textarea id="t-text" style="min-height:110px;">${esc(t.text)}</textarea></div>`;
+  document.getElementById('modal-foot').innerHTML = `
+    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-blue" onclick="saveTestimonial(${t.id},${isNew})"><i class="fas fa-save"></i> Save</button>`;
+  openModal();
+}
+function saveTestimonial(id, isNew){
+  const obj = {id, stars:parseInt(document.getElementById('t-stars').value)||5, text:document.getElementById('t-text').value, name:document.getElementById('t-name').value, detail:document.getElementById('t-detail').value, avatar:document.getElementById('t-avatar').value};
+  if(isNew) D.testimonials.items.push(obj);
+  else { const i = D.testimonials.items.findIndex(x=>x.id===id); if(i>=0) D.testimonials.items[i]=obj; }
+  saveData(); closeModal(); renderTestimonials(); toast('Testimonial saved!');
+}
+function deleteTestimonial(id){
+  if(!confirm('Remove this testimonial?')) return;
+  D.testimonials.items = D.testimonials.items.filter(x=>x.id!==id);
+  saveData(); renderTestimonials(); toast('Testimonial removed.');
+}
+
+/* ───── SETTINGS ───── */
+function saveCredentials(){
+  const un = document.getElementById('new-un').value.trim();
+  const pw = document.getElementById('new-pw').value;
+  const cp = document.getElementById('conf-pw').value;
+  if(!un) return toast('Username cannot be empty.','err');
+  if(pw !== cp) return toast('Passwords do not match.','err');
+  if(pw.length < 6) return toast('Password must be at least 6 characters.','err');
+  D.credentials = {username:un, password:pw};
+  saveData(); toast('Credentials updated! Please remember your new login.');
+}
+function exportData(){
+  const blob = new Blob([JSON.stringify(D, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'takshila-cms-backup.json'; a.click();
+}
+function importData(e){
+  const file = e.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = ev => { try{ D = JSON.parse(ev.target.result); saveData(); initPanel('hero'); toast('Data imported successfully!'); } catch{ toast('Invalid JSON file.','err'); } };
+  r.readAsText(file);
+}
+function resetData(){
+  if(!confirm('Reset ALL content to defaults? This cannot be undone.')) return;
+  D = deepCopy(DEFAULTS); saveData(); initPanel(document.getElementById('panel-title').textContent.toLowerCase().split(' ')[0]||'hero'); toast('Reset to defaults.');
+}
+
+/* ───── MODAL ───── */
+function openModal(){ document.getElementById('modal-overlay').classList.add('open'); }
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+document.getElementById('modal-overlay').addEventListener('click', e=>{ if(e.target===document.getElementById('modal-overlay')) closeModal(); });
+
+/* ───── TOAST ───── */
+function toast(msg, type=''){
+  const el = document.createElement('div');
+  el.className = 'toast'+(type==='err'?' err':'');
+  el.innerHTML = `<i class="fas ${type==='err'?'fa-times-circle':'fa-check-circle'}"></i>${msg}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(), 3500);
+}
+
+/* ───── UTILS ───── */
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ───── INIT ───── */
+loadData();
+</script>
+</body>
+</html>
