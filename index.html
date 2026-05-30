@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<!-- CMS data written by admin.html via File System Access API. Falls back to localStorage. -->
-<script src="cms-data.js" onerror="console.info('cms-data.js not found — using localStorage fallback')"></script>
+<!-- CMS data written by admin.html via File System Access API and served from the FTP server. -->
+<script src="cms-data.js" onerror="console.info('cms-data.js not found — keeping page defaults')"></script>
 <style>
 :root {
   --navy: #1B3DA0;
@@ -1227,18 +1227,12 @@ revealEls.forEach(el => {
 // Year tab switching — overridden by CMS loader below if data exists
 
 /* ═══════════════════════════════════════════
-   CMS LOADER — reads from localStorage and
-   applies admin panel changes to the site
+   CMS LOADER — reads from cms-data.js served
+   via FTP and applies admin panel changes
 ═══════════════════════════════════════════ */
 (function(){
-  const KEY = 'takshila_cms';
-  // 1st priority: cms-data.js written by admin to disk (window.TAKSHILA_CMS)
-  // 2nd priority: localStorage (browser storage)
   let D = window.TAKSHILA_CMS || null;
-  if(!D){ try{ D = JSON.parse(localStorage.getItem(KEY)); } catch(e){ D = null; } }
-  if(!D) return; // no data saved yet, keep defaults
-  // Sync file data into localStorage so admin panel also stays current
-  if(window.TAKSHILA_CMS) try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){}
+  if(!D) return; // cms-data.js not deployed yet, keep page defaults
 
   /* ── HERO ── */
   if(D.hero){
