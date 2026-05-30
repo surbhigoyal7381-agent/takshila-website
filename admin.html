@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Takshila Admin Panel</title>
-<script src="cms-data.js" onerror="console.info('cms-data.js not found — starting with defaults')"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -204,7 +203,7 @@ input:checked+.sl:before{transform:translateX(18px);}
     <div class="topbar">
       <h2 id="panel-title">Hero Section</h2>
       <div class="topbar-right">
-        <div class="file-status off" id="file-status" onclick="handleFileStatusClick()" title="Click to connect cms-data.js for permanent on-disk storage"><i class="fas fa-circle" style="font-size:7px;"></i><span id="fst">Connecting…</span></div>
+        <div class="file-status off" id="file-status"><i class="fas fa-circle" style="font-size:7px;"></i><span id="fst">Not saved yet</span></div>
         <span style="color:var(--border);font-size:18px;line-height:1;">|</span>
         <a href="https://takshila-registration.web.app/" target="_blank" class="preview-link" style="color:var(--success);"><i class="fas fa-user-plus"></i> Registration Portal</a>
         <span style="color:var(--border);font-size:18px;line-height:1;">|</span>
@@ -361,7 +360,7 @@ input:checked+.sl:before{transform:translateX(18px);}
         </div>
         <div class="card">
           <div class="card-title"><i class="fas fa-database"></i> Data Management</div>
-          <p style="font-size:14px;color:var(--gray);margin-bottom:16px;">All content is saved to cms-data.js on the server. Use these tools to export/import or reset to defaults.</p>
+          <p style="font-size:14px;color:var(--gray);margin-bottom:16px;">All content is saved to the MySQL database. Use these tools to export/import or reset to defaults.</p>
           <div class="flex-gap">
             <button class="btn btn-outline btn-sm" onclick="exportData()"><i class="fas fa-download"></i> Export JSON</button>
             <button class="btn btn-outline btn-sm" onclick="document.getElementById('import-file').click()"><i class="fas fa-upload"></i> Import JSON</button>
@@ -446,143 +445,43 @@ const DEFAULTS = {
   }
 };
 
-let D = {}, currentYear = '', modalAction = null, fileHandle = null;
+let D = {}, currentYear = '', modalAction = null;
+const CMS_API_KEY = '%%CMS_API_KEY%%';
 
 /* ───── DATA ───── */
-function loadData(){
-  D = window.TAKSHILA_CMS ? JSON.parse(JSON.stringify(window.TAKSHILA_CMS)) : deepCopy(DEFAULTS);
+async function loadData(){
+  try{
+    const resp = await fetch('api.php');
+    const data = resp.ok ? await resp.json() : null;
+    D = data ? JSON.parse(JSON.stringify(data)) : deepCopy(DEFAULTS);
+  }catch(e){ D = deepCopy(DEFAULTS); }
   if(!D.credentials) D.credentials = deepCopy(DEFAULTS.credentials);
   if(!D.results) D.results = deepCopy(DEFAULTS.results);
   if(!D.testimonials) D.testimonials = deepCopy(DEFAULTS.testimonials);
 }
-function saveData(){
-  writeToFile(); // writes cms-data.js to disk via File System Access API
-}
+function saveData(msg){ writeToServer(msg); }
 function deepCopy(o){ return JSON.parse(JSON.stringify(o)); }
 
-/* ───── FILE SYSTEM PERSISTENCE ───── */
-// Uses File System Access API (Chrome/Edge) + IndexedDB to remember the handle.
-// The admin writes cms-data.js on every save; the website loads it via <script src>.
-
-const FS_DB = 'TakshilaCMSHandles', FS_STORE = 'fh';
-
-function openFSDB(){
-  return new Promise((res,rej)=>{
-    const r = indexedDB.open(FS_DB,1);
-    r.onupgradeneeded = e => e.target.result.createObjectStore(FS_STORE);
-    r.onsuccess = e => res(e.target.result);
-    r.onerror = ()=>rej(r.error);
-  });
-}
-async function persistHandle(h){
-  const db = await openFSDB();
-  return new Promise((res,rej)=>{
-    const tx = db.transaction(FS_STORE,'readwrite');
-    tx.objectStore(FS_STORE).put(h,'cms');
-    tx.oncomplete = res; tx.onerror = ()=>rej(tx.error);
-  });
-}
-async function retrieveHandle(){
+/* ───── SERVER PERSISTENCE ───── */
+async function writeToServer(msg){
+  setFileStatus('warn','Saving…');
   try{
-    const db = await openFSDB();
-    return new Promise(res=>{
-      const tx = db.transaction(FS_STORE,'readonly');
-      const r = tx.objectStore(FS_STORE).get('cms');
-      r.onsuccess = ()=>res(r.result||null);
-      r.onerror = ()=>res(null);
+    const resp = await fetch('api.php',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-CMS-Key':CMS_API_KEY},
+      body:JSON.stringify(D)
     });
-  }catch{ return null; }
-}
-async function dropHandle(){
-  try{
-    const db = await openFSDB();
-    const tx = db.transaction(FS_STORE,'readwrite');
-    tx.objectStore(FS_STORE).delete('cms');
-  }catch{}
-}
-
-async function writeToFile(){
-  if(!fileHandle) return;
-  try{
-    const perm = await fileHandle.queryPermission({mode:'readwrite'});
-    if(perm === 'prompt'){
-      // Can only request inside user gesture — silently skip; user will retry on next manual save
-      setFileStatus('warn','Click the status pill to restore file permission');
-      return;
+    if(resp.ok){
+      setFileStatus('ok','✓ Saved to database');
+      if(msg) toast(msg);
+    } else {
+      const err = await resp.json().catch(()=>({}));
+      setFileStatus('warn','Save failed');
+      toast('Save failed: '+(err.error||resp.status),'err');
     }
-    if(perm !== 'granted'){
-      fileHandle = null; await dropHandle();
-      setFileStatus('warn','Permission lost — click to reconnect');
-      return;
-    }
-    const js = '/* Takshila CMS — auto-generated by admin.html, do not edit manually */\n'
-              +'window.TAKSHILA_CMS = '+JSON.stringify(D,null,2)+';\n';
-    const wr = await fileHandle.createWritable();
-    await wr.write(js);
-    await wr.close();
-    setFileStatus('ok','✓ Saved to '+fileHandle.name);
   }catch(e){
-    if(e.name !== 'AbortError'){
-      console.warn('CMS file write failed:',e);
-      fileHandle = null; await dropHandle();
-      setFileStatus('warn','File write failed — click to reconnect');
-    }
-  }
-}
-
-async function restoreFileHandle(){
-  if(!window.showSaveFilePicker){
-    setFileStatus('off','File persistence needs Chrome / Edge');
-    return;
-  }
-  const h = await retrieveHandle();
-  if(!h){ setFileStatus('off','Click to enable permanent file storage'); return; }
-  fileHandle = h;
-  try{
-    const perm = await h.queryPermission({mode:'readwrite'});
-    if(perm === 'granted') setFileStatus('ok','Connected · '+h.name);
-    else setFileStatus('warn','Click to restore permission for '+h.name);
-  }catch{ fileHandle = null; setFileStatus('off','Click to enable permanent file storage'); }
-}
-
-async function handleFileStatusClick(){
-  if(!window.showSaveFilePicker){
-    alert('Permanent file storage requires Chrome or Edge.\n\nUse Settings → Export JSON to back up your content in other browsers.');
-    return;
-  }
-  // Already connected — offer to disconnect
-  if(fileHandle){
-    if(confirm('Currently connected to: '+fileHandle.name+'\n\nDisconnect from this file?')){
-      fileHandle = null; await dropHandle();
-      setFileStatus('off','Click to enable permanent file storage');
-    }
-    return;
-  }
-  // Permission was revoked — try to re-request
-  const stored = await retrieveHandle();
-  if(stored){
-    try{
-      const perm = await stored.requestPermission({mode:'readwrite'});
-      if(perm === 'granted'){
-        fileHandle = stored;
-        await writeToFile();
-        setFileStatus('ok','✓ Reconnected · '+stored.name);
-        return;
-      }
-    }catch{}
-  }
-  // No handle yet (or re-request failed) — open picker
-  try{
-    fileHandle = await window.showSaveFilePicker({
-      suggestedName: 'cms-data.js',
-      types:[{description:'CMS Data File',accept:{'text/javascript':['.js']}}],
-    });
-    await persistHandle(fileHandle);
-    await writeToFile();
-    toast('Permanent storage connected! All saves now write to '+fileHandle.name);
-    setFileStatus('ok','✓ Connected · '+fileHandle.name);
-  }catch(e){
-    if(e.name !== 'AbortError') toast('Could not connect file: '+e.message,'err');
+    setFileStatus('warn','Save failed');
+    toast('Could not reach server — check connection','err');
   }
 }
 
@@ -595,8 +494,11 @@ function setFileStatus(state, msg){
 }
 
 /* ───── AUTH ───── */
-function doLogin(){
-  loadData();
+async function doLogin(){
+  const btn = document.querySelector('#login-page button');
+  if(btn){ btn.disabled=true; btn.textContent='Loading…'; }
+  await loadData();
+  if(btn){ btn.disabled=false; btn.textContent='Login'; }
   const un = document.getElementById('un').value.trim();
   const pw = document.getElementById('pw').value;
   if(un === D.credentials.username && pw === D.credentials.password){
@@ -669,7 +571,7 @@ function saveHero(){
   D.hero.desc = document.getElementById('hero-desc').value;
   D.hero.cta = document.getElementById('hero-cta').value;
   D.hero.mediaUrl = document.getElementById('hero-media-url').value;
-  saveData(); toast('Hero section saved!');
+  saveData('Hero section saved!');
 }
 
 /* ───── ABOUT ───── */
@@ -703,7 +605,7 @@ function saveAbout(){
   D.about.p1 = document.getElementById('about-p1').value;
   D.about.p2 = document.getElementById('about-p2').value;
   D.about.mediaUrl = document.getElementById('about-media-url').value;
-  saveData(); toast('About section saved!');
+  saveData('About section saved!');
 }
 
 /* ───── COURSES ───── */
@@ -752,12 +654,12 @@ function saveCourse(id, isNew){
   };
   if(isNew) D.courses.push(obj);
   else { const i = D.courses.findIndex(x=>x.id===id); if(i>=0) D.courses[i]=obj; }
-  saveData(); closeModal(); renderCourses(); toast('Course saved!');
+  saveData('Course saved!'); closeModal(); renderCourses();
 }
 function deleteCourse(id){
   if(!confirm('Delete this course?')) return;
   D.courses = D.courses.filter(x=>x.id!==id);
-  saveData(); renderCourses(); toast('Course deleted.');
+  saveData('Course deleted.'); renderCourses();
 }
 
 /* ───── RESULTS ───── */
@@ -799,14 +701,14 @@ function addYear(){
   if(D.results[y.trim()]) return toast('Year already exists.','err');
   D.results[y.trim()] = [];
   currentYear = y.trim();
-  saveData(); initResults(); toast('Year '+y+' added!');
+  saveData('Year '+y+' added!'); initResults();
 }
 function deleteYear(){
   if(!currentYear || !confirm(`Delete all results for ${currentYear}?`)) return;
   delete D.results[currentYear];
   const years = Object.keys(D.results).sort((a,b)=>b-a);
   currentYear = years[0]||'';
-  saveData(); initResults(); toast('Year deleted.');
+  saveData('Year deleted.'); initResults();
 }
 function openResultModal(id){
   const r = id ? (D.results[currentYear]||[]).find(x=>x.id===id) : {id:Date.now(),name:'',exam:'JEE MAIN',score:'',detail:''};
@@ -833,12 +735,12 @@ function saveResult(id, isNew){
   if(!D.results[currentYear]) D.results[currentYear]=[];
   if(isNew) D.results[currentYear].push(obj);
   else { const i = D.results[currentYear].findIndex(x=>x.id===id); if(i>=0) D.results[currentYear][i]=obj; }
-  saveData(); closeModal(); renderResultsTable(); toast('Result saved!');
+  saveData('Result saved!'); closeModal(); renderResultsTable();
 }
 function deleteResult(id){
   if(!confirm('Delete this result?')) return;
   D.results[currentYear] = D.results[currentYear].filter(x=>x.id!==id);
-  saveData(); renderResultsTable(); toast('Result deleted.');
+  saveData('Result deleted.'); renderResultsTable();
 }
 
 /* ───── FACULTY ───── */
@@ -887,12 +789,12 @@ function saveFaculty(id, isNew){
   const obj = {id, name:document.getElementById('f-name').value, subject:document.getElementById('f-subj').value, qual:document.getElementById('f-qual').value, exp:document.getElementById('f-exp').value, badge:document.getElementById('f-badge').value, mediaType:mt, mediaUrl:document.getElementById('f-url').value};
   if(isNew) D.faculty.push(obj);
   else { const i = D.faculty.findIndex(x=>x.id===id); if(i>=0) D.faculty[i]=obj; }
-  saveData(); closeModal(); renderFaculty(); toast('Faculty saved!');
+  saveData('Faculty saved!'); closeModal(); renderFaculty();
 }
 function deleteFaculty(id){
   if(!confirm('Remove this faculty member?')) return;
   D.faculty = D.faculty.filter(x=>x.id!==id);
-  saveData(); renderFaculty(); toast('Faculty removed.');
+  saveData('Faculty removed.'); renderFaculty();
 }
 
 /* ───── GALLERY ───── */
@@ -935,12 +837,12 @@ function saveGallery(id, isNew){
   const obj = {id, label:document.getElementById('g-label').value, mediaType:mt, mediaUrl:document.getElementById('g-url').value};
   if(isNew) D.gallery.push(obj);
   else { const i = D.gallery.findIndex(x=>x.id===id); if(i>=0) D.gallery[i]=obj; }
-  saveData(); closeModal(); renderGallery(); toast('Gallery item saved!');
+  saveData('Gallery item saved!'); closeModal(); renderGallery();
 }
 function deleteGallery(id){
   if(!confirm('Remove this gallery item?')) return;
   D.gallery = D.gallery.filter(x=>x.id!==id);
-  saveData(); renderGallery(); toast('Gallery item removed.');
+  saveData('Gallery item removed.'); renderGallery();
 }
 
 /* ───── TESTIMONIALS ───── */
@@ -985,7 +887,7 @@ function ytEmbed(url){
 function saveYT(){
   D.testimonials.youtubeUrl = document.getElementById('yt-url').value;
   D.testimonials.youtubeEnabled = document.getElementById('yt-enabled').checked;
-  saveData(); toast('YouTube settings saved!');
+  saveData('YouTube settings saved!');
 }
 function openTestimonialModal(id){
   const t = id ? D.testimonials.items.find(x=>x.id===id) : {id:Date.now(),stars:5,text:'',name:'',detail:'',avatar:''};
@@ -1010,12 +912,12 @@ function saveTestimonial(id, isNew){
   const obj = {id, stars:parseInt(document.getElementById('t-stars').value)||5, text:document.getElementById('t-text').value, name:document.getElementById('t-name').value, detail:document.getElementById('t-detail').value, avatar:document.getElementById('t-avatar').value};
   if(isNew) D.testimonials.items.push(obj);
   else { const i = D.testimonials.items.findIndex(x=>x.id===id); if(i>=0) D.testimonials.items[i]=obj; }
-  saveData(); closeModal(); renderTestimonials(); toast('Testimonial saved!');
+  saveData('Testimonial saved!'); closeModal(); renderTestimonials();
 }
 function deleteTestimonial(id){
   if(!confirm('Remove this testimonial?')) return;
   D.testimonials.items = D.testimonials.items.filter(x=>x.id!==id);
-  saveData(); renderTestimonials(); toast('Testimonial removed.');
+  saveData('Testimonial removed.'); renderTestimonials();
 }
 
 /* ───── SETTINGS ───── */
@@ -1027,7 +929,7 @@ function saveCredentials(){
   if(pw !== cp) return toast('Passwords do not match.','err');
   if(pw.length < 6) return toast('Password must be at least 6 characters.','err');
   D.credentials = {username:un, password:pw};
-  saveData(); toast('Credentials updated! Please remember your new login.');
+  saveData('Credentials updated! Please remember your new login.');
 }
 function exportData(){
   const blob = new Blob([JSON.stringify(D, null, 2)], {type:'application/json'});
@@ -1037,12 +939,12 @@ function exportData(){
 function importData(e){
   const file = e.target.files[0]; if(!file) return;
   const r = new FileReader();
-  r.onload = ev => { try{ D = JSON.parse(ev.target.result); saveData(); initPanel('hero'); toast('Data imported successfully!'); } catch{ toast('Invalid JSON file.','err'); } };
+  r.onload = ev => { try{ D = JSON.parse(ev.target.result); saveData('Data imported successfully!'); initPanel('hero'); } catch{ toast('Invalid JSON file.','err'); } };
   r.readAsText(file);
 }
 function resetData(){
   if(!confirm('Reset ALL content to defaults? This cannot be undone.')) return;
-  D = deepCopy(DEFAULTS); saveData(); initPanel(document.getElementById('panel-title').textContent.toLowerCase().split(' ')[0]||'hero'); toast('Reset to defaults.');
+  D = deepCopy(DEFAULTS); saveData('Reset to defaults.'); initPanel(document.getElementById('panel-title').textContent.toLowerCase().split(' ')[0]||'hero');
 }
 
 /* ───── MODAL ───── */
@@ -1063,8 +965,7 @@ function toast(msg, type=''){
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 /* ───── INIT ───── */
-loadData();
-restoreFileHandle(); // async — restores file handle from IndexedDB on every page load
+setFileStatus('off','Not saved yet');
 </script>
 </body>
 </html>

@@ -8,8 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<!-- CMS data written by admin.html via File System Access API and served from the FTP server. -->
-<script src="cms-data.js" onerror="console.info('cms-data.js not found — keeping page defaults')"></script>
+<!-- CMS data loaded dynamically from MySQL via api.php -->
 <style>
 :root {
   --navy: #1B3DA0;
@@ -1227,12 +1226,17 @@ revealEls.forEach(el => {
 // Year tab switching — overridden by CMS loader below if data exists
 
 /* ═══════════════════════════════════════════
-   CMS LOADER — reads from cms-data.js served
-   via FTP and applies admin panel changes
+   CMS LOADER — fetches from MySQL via api.php
+   and applies admin panel changes to the site
 ═══════════════════════════════════════════ */
-(function(){
-  let D = window.TAKSHILA_CMS || null;
-  if(!D) return; // cms-data.js not deployed yet, keep page defaults
+(async function(){
+  let D;
+  try{
+    const resp = await fetch('api.php');
+    if(!resp.ok) return;
+    D = await resp.json();
+  }catch(e){ return; }
+  if(!D) return;
 
   /* ── HERO ── */
   if(D.hero){

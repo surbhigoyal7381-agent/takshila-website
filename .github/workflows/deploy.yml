@@ -12,6 +12,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Inject secrets into PHP and JS
+        env:
+          CMS_API_KEY: ${{ secrets.CMS_API_KEY }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+        run: |
+          sed -i "s|%%CMS_API_KEY%%|$CMS_API_KEY|g" admin.html api.php
+          sed -i "s|%%DB_HOST%%|$DB_HOST|g" api.php
+          sed -i "s|%%DB_NAME%%|$DB_NAME|g" api.php
+          sed -i "s|%%DB_USER%%|$DB_USER|g" api.php
+          sed -i "s|%%DB_PASS%%|$DB_PASS|g" api.php
+
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
