@@ -19,8 +19,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /takshilajagadhri.com/
+          protocol: ftp
+          port: 21
           exclude: |
             **/.git*
             **/.git*/**
-            **/index_files/destination/**
             index.zip
