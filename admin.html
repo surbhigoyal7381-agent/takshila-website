@@ -156,6 +156,12 @@ input:checked+.sl:before{transform:translateX(18px);}
 .yt-preview{width:100%;aspect-ratio:16/9;border-radius:10px;border:none;margin-top:8px;}
 .empty-state{text-align:center;padding:40px 20px;color:var(--gray);}
 .empty-state i{font-size:40px;display:block;margin-bottom:12px;opacity:.4;}
+
+/* UPLOAD UI */
+.upload-wrap{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.media-preview{margin-top:10px;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);background:var(--bg);}
+.media-preview img,.media-preview video{display:block;width:100%;max-height:150px;object-fit:cover;}
+.media-preview-label{font-size:11px;color:var(--gray);padding:5px 10px;background:var(--bg);border-top:1px solid var(--border);}
 </style>
 </head>
 <body>
@@ -191,6 +197,7 @@ input:checked+.sl:before{transform:translateX(18px);}
       <div class="nav-item" onclick="showPanel('faculty')"><i class="fas fa-chalkboard-teacher"></i> Faculty</div>
       <div class="nav-item" onclick="showPanel('gallery')"><i class="fas fa-images"></i> Gallery</div>
       <div class="nav-item" onclick="showPanel('testimonials')"><i class="fas fa-star"></i> Testimonials</div>
+      <div class="nav-item" onclick="showPanel('enquiries')"><i class="fas fa-envelope-open-text"></i> Enquiries</div>
       <div class="nav-item" onclick="showPanel('settings')"><i class="fas fa-cog"></i> Settings</div>
     </div>
     <div class="sb-foot">
@@ -220,10 +227,19 @@ input:checked+.sl:before{transform:translateX(18px);}
         <div class="card">
           <div class="card-title"><i class="fas fa-image"></i> Background Media</div>
           <div class="media-row">
-            <button class="mt-btn on" id="hero-mt-image" onclick="setMediaType('hero','image')">Image URL</button>
-            <button class="mt-btn" id="hero-mt-video" onclick="setMediaType('hero','video')">Video URL (MP4)</button>
+            <button class="mt-btn on" id="hero-mt-image" onclick="setMediaType('hero','image')">Image</button>
+            <button class="mt-btn" id="hero-mt-video" onclick="setMediaType('hero','video')">Video (MP4)</button>
           </div>
-          <div class="fg"><input id="hero-media-url" placeholder="Paste image or video URL here..."><p class="hint">For images use any URL. For MP4 video paste direct .mp4 link.</p></div>
+          <div class="fg">
+            <label>Paste URL</label>
+            <input id="hero-media-url" placeholder="https://…" oninput="updateMediaPreview('hero-media-url')">
+            <div class="upload-wrap">
+              <button type="button" class="btn btn-outline btn-sm" onclick="pickMedia('hero-media-url',null,null,'hero')"><i class="fas fa-upload"></i> Upload from computer</button>
+              <button type="button" class="btn btn-danger btn-sm" id="hero-media-url-clear" onclick="clearMedia('hero-media-url')" style="display:none;"><i class="fas fa-times"></i> Clear</button>
+            </div>
+            <div id="hero-media-url-preview" class="media-preview" style="display:none;"></div>
+            <p class="hint">Paste a URL or upload from your computer (max 3 MB). Uploaded files are stored in the database.</p>
+          </div>
         </div>
         <div class="card">
           <div class="card-title"><i class="fas fa-heading"></i> Hero Text</div>
@@ -249,10 +265,19 @@ input:checked+.sl:before{transform:translateX(18px);}
         <div class="card">
           <div class="card-title"><i class="fas fa-image"></i> About Media</div>
           <div class="media-row">
-            <button class="mt-btn on" id="about-mt-image" onclick="setMediaType('about','image')">Image URL</button>
-            <button class="mt-btn" id="about-mt-video" onclick="setMediaType('about','video')">Video URL (MP4)</button>
+            <button class="mt-btn on" id="about-mt-image" onclick="setMediaType('about','image')">Image</button>
+            <button class="mt-btn" id="about-mt-video" onclick="setMediaType('about','video')">Video (MP4)</button>
           </div>
-          <div class="fg"><input id="about-media-url" placeholder="Paste image or video URL..."></div>
+          <div class="fg">
+            <label>Paste URL</label>
+            <input id="about-media-url" placeholder="https://…" oninput="updateMediaPreview('about-media-url')">
+            <div class="upload-wrap">
+              <button type="button" class="btn btn-outline btn-sm" onclick="pickMedia('about-media-url',null,null,'about')"><i class="fas fa-upload"></i> Upload from computer</button>
+              <button type="button" class="btn btn-danger btn-sm" id="about-media-url-clear" onclick="clearMedia('about-media-url')" style="display:none;"><i class="fas fa-times"></i> Clear</button>
+            </div>
+            <div id="about-media-url-preview" class="media-preview" style="display:none;"></div>
+            <p class="hint">Paste a URL or upload from your computer (max 3 MB). Uploaded files are stored in the database.</p>
+          </div>
         </div>
         <div class="card">
           <div class="card-title"><i class="fas fa-align-left"></i> About Content</div>
@@ -345,6 +370,26 @@ input:checked+.sl:before{transform:translateX(18px);}
           <button class="btn btn-primary btn-sm" onclick="openTestimonialModal()"><i class="fas fa-plus"></i> Add Testimonial</button>
         </div>
         <div class="items-grid" id="testimonials-grid"></div>
+      </div>
+
+      <!-- ENQUIRIES -->
+      <div class="panel" id="panel-enquiries">
+        <div class="card">
+          <div class="flex-between" style="margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:15px;font-weight:700;">Contact Form Enquiries</span>
+              <span id="enq-count" style="font-size:12px;color:var(--gray);background:var(--bg);padding:3px 10px;border-radius:20px;border:1px solid var(--border);"></span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="loadEnquiries()"><i class="fas fa-sync-alt"></i> Refresh</button>
+          </div>
+          <div id="enq-loading" style="text-align:center;padding:28px;color:var(--gray);display:none;"><i class="fas fa-spinner fa-spin"></i> Loading enquiries…</div>
+          <div style="overflow-x:auto;">
+            <table class="tbl">
+              <thead><tr><th>#</th><th>Student</th><th>Parent</th><th>Mobile</th><th>Email</th><th>Class</th><th>Course</th><th>Message</th><th>Received</th><th></th></tr></thead>
+              <tbody id="enq-tbody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- SETTINGS -->
@@ -515,7 +560,7 @@ document.addEventListener('keydown', e=>{ if(e.key==='Enter' && document.getElem
 function doLogout(){ document.getElementById('dashboard').style.display='none'; document.getElementById('login-page').style.display='flex'; }
 
 /* ───── PANELS ───── */
-const TITLES = {hero:'Hero Section',about:'About Us',courses:'Courses',results:'Results',faculty:'Faculty',gallery:'Gallery',testimonials:'Testimonials',settings:'Settings'};
+const TITLES = {hero:'Hero Section',about:'About Us',courses:'Courses',results:'Results',faculty:'Faculty',gallery:'Gallery',testimonials:'Testimonials',enquiries:'Contact Enquiries',settings:'Settings'};
 function showPanel(name){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -532,6 +577,7 @@ function initPanel(name){
   else if(name==='faculty') renderFaculty();
   else if(name==='gallery') renderGallery();
   else if(name==='testimonials') renderTestimonials();
+  else if(name==='enquiries') loadEnquiries();
   else if(name==='settings'){ document.getElementById('new-un').value=D.credentials.username; document.getElementById('new-pw').value=''; document.getElementById('conf-pw').value=''; }
 }
 
@@ -555,6 +601,7 @@ function loadHeroForm(){
   document.getElementById('hero-media-url').value = h.mediaUrl||'';
   document.getElementById('hero-mt-image').classList.toggle('on', h.mediaType!=='video');
   document.getElementById('hero-mt-video').classList.toggle('on', h.mediaType==='video');
+  updateMediaPreview('hero-media-url');
   const sl = document.getElementById('hero-stats-list');
   sl.innerHTML = (h.stats||[]).map((s,i)=>`
     <div class="stat-row">
@@ -586,6 +633,7 @@ function loadAboutForm(){
   document.getElementById('about-media-url').value = a.mediaUrl||'';
   document.getElementById('about-mt-image').classList.toggle('on', a.mediaType!=='video');
   document.getElementById('about-mt-video').classList.toggle('on', a.mediaType==='video');
+  updateMediaPreview('about-media-url');
   renderAboutFeats();
 }
 function renderAboutFeats(){
@@ -778,11 +826,21 @@ function openFacultyModal(id){
         <button class="mt-btn${f.mediaType==='video'?' on':''}" id="fm-vid" onclick="this.classList.add('on');document.getElementById('fm-img').classList.remove('on');">Video (MP4)</button>
       </div>
     </div>
-    <div class="fg"><label>Image / Video URL</label><input id="f-url" value="${esc(f.mediaUrl)}" placeholder="Paste URL..."></div>`;
+    <div class="fg">
+      <label>Image / Video URL</label>
+      <input id="f-url" value="${esc(f.mediaUrl)}" placeholder="Paste URL…" oninput="updateMediaPreview('f-url')">
+      <div class="upload-wrap">
+        <button type="button" class="btn btn-outline btn-sm" onclick="pickMedia('f-url','fm-img','fm-vid',null)"><i class="fas fa-upload"></i> Upload from computer</button>
+        <button type="button" class="btn btn-danger btn-sm" id="f-url-clear" onclick="clearMedia('f-url')" style="display:none;"><i class="fas fa-times"></i> Clear</button>
+      </div>
+      <div id="f-url-preview" class="media-preview" style="display:none;"></div>
+      <p class="hint">Max 3 MB. Uploaded images are stored in the database.</p>
+    </div>`;
   document.getElementById('modal-foot').innerHTML = `
     <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
     <button class="btn btn-blue" onclick="saveFaculty(${f.id},${isNew})"><i class="fas fa-save"></i> Save</button>`;
   openModal();
+  updateMediaPreview('f-url');
 }
 function saveFaculty(id, isNew){
   const mt = document.getElementById('fm-vid').classList.contains('on') ? 'video' : 'image';
@@ -826,11 +884,21 @@ function openGalleryModal(id){
         <button class="mt-btn${g.mediaType==='video'?' on':''}" id="gm-vid" onclick="this.classList.add('on');document.getElementById('gm-img').classList.remove('on');">Video (MP4)</button>
       </div>
     </div>
-    <div class="fg"><label>Image / Video URL</label><input id="g-url" value="${esc(g.mediaUrl)}" placeholder="Paste URL..."></div>`;
+    <div class="fg">
+      <label>Image / Video URL</label>
+      <input id="g-url" value="${esc(g.mediaUrl)}" placeholder="Paste URL…" oninput="updateMediaPreview('g-url')">
+      <div class="upload-wrap">
+        <button type="button" class="btn btn-outline btn-sm" onclick="pickMedia('g-url','gm-img','gm-vid',null)"><i class="fas fa-upload"></i> Upload from computer</button>
+        <button type="button" class="btn btn-danger btn-sm" id="g-url-clear" onclick="clearMedia('g-url')" style="display:none;"><i class="fas fa-times"></i> Clear</button>
+      </div>
+      <div id="g-url-preview" class="media-preview" style="display:none;"></div>
+      <p class="hint">Max 3 MB. Uploaded images are stored in the database.</p>
+    </div>`;
   document.getElementById('modal-foot').innerHTML = `
     <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
     <button class="btn btn-blue" onclick="saveGallery(${g.id},${isNew})"><i class="fas fa-save"></i> Save</button>`;
   openModal();
+  updateMediaPreview('g-url');
 }
 function saveGallery(id, isNew){
   const mt = document.getElementById('gm-vid').classList.contains('on') ? 'video' : 'image';
@@ -920,6 +988,52 @@ function deleteTestimonial(id){
   saveData('Testimonial removed.'); renderTestimonials();
 }
 
+/* ───── ENQUIRIES ───── */
+async function loadEnquiries(){
+  const loading = document.getElementById('enq-loading');
+  const tbody   = document.getElementById('enq-tbody');
+  const count   = document.getElementById('enq-count');
+  loading.style.display = 'block';
+  tbody.innerHTML = '';
+  try{
+    const resp = await fetch('api.php?action=contacts', { headers:{'X-CMS-Key':CMS_API_KEY} });
+    if(!resp.ok){ const e=await resp.json().catch(()=>({})); toast('Failed to load enquiries: '+(e.error||resp.status),'err'); return; }
+    const rows = await resp.json();
+    count.textContent = rows.length + ' enquir' + (rows.length===1?'y':'ies');
+    if(!rows.length){
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--gray);"><i class="fas fa-inbox" style="font-size:28px;display:block;margin-bottom:10px;opacity:.4;"></i>No enquiries yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map((r,i)=>`
+      <tr>
+        <td style="color:var(--gray);font-size:13px;">${i+1}</td>
+        <td style="font-weight:700;">${esc(r.name)}</td>
+        <td>${esc(r.parent_name||'—')}</td>
+        <td><a href="tel:${esc(r.mobile)}" style="color:var(--blue);font-weight:600;">${esc(r.mobile)}</a></td>
+        <td style="font-size:13px;">${esc(r.email||'—')}</td>
+        <td style="font-size:13px;">${esc(r.class||'—')}</td>
+        <td style="font-size:13px;">${esc(r.course||'—')}</td>
+        <td style="font-size:13px;color:var(--gray);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${esc(r.message||'')}">${esc(r.message||'—')}</td>
+        <td style="font-size:12px;color:var(--gray);white-space:nowrap;">${formatDate(r.created_at)}</td>
+        <td><button class="btn btn-danger btn-xs" onclick="deleteEnquiry(${r.id})"><i class="fas fa-trash"></i></button></td>
+      </tr>`).join('');
+  }catch(e){ toast('Could not reach server','err'); }
+  finally{ loading.style.display='none'; }
+}
+async function deleteEnquiry(id){
+  if(!confirm('Delete this enquiry? This cannot be undone.')) return;
+  try{
+    const resp = await fetch('api.php?action=contact&id='+id, { method:'DELETE', headers:{'X-CMS-Key':CMS_API_KEY} });
+    if(resp.ok){ toast('Enquiry deleted.'); loadEnquiries(); }
+    else toast('Failed to delete enquiry.','err');
+  }catch(e){ toast('Could not reach server','err'); }
+}
+function formatDate(str){
+  if(!str) return '—';
+  const d = new Date(str);
+  return isNaN(d) ? str : d.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
 /* ───── SETTINGS ───── */
 function saveCredentials(){
   const un = document.getElementById('new-un').value.trim();
@@ -959,6 +1073,64 @@ function toast(msg, type=''){
   el.innerHTML = `<i class="fas ${type==='err'?'fa-times-circle':'fa-check-circle'}"></i>${msg}`;
   document.getElementById('toasts').appendChild(el);
   setTimeout(()=>el.remove(), 3500);
+}
+
+/* ───── MEDIA UPLOAD ───── */
+function pickMedia(targetId, imgBtnId, vidBtnId, section) {
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/*,video/mp4';
+  inp.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 3 * 1024 * 1024) {
+      toast('File too large — max 3 MB. Please resize or compress it first.', 'err');
+      return;
+    }
+    const isVideo = file.type.startsWith('video/');
+    if (section) {
+      setMediaType(section, isVideo ? 'video' : 'image');
+    } else {
+      if (imgBtnId) document.getElementById(imgBtnId)?.classList.toggle('on', !isVideo);
+      if (vidBtnId) document.getElementById(vidBtnId)?.classList.toggle('on', isVideo);
+    }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const el = document.getElementById(targetId);
+      if (el) { el.value = ev.target.result; updateMediaPreview(targetId); }
+    };
+    reader.readAsDataURL(file);
+  };
+  inp.click();
+}
+
+function updateMediaPreview(inputId) {
+  const preview  = document.getElementById(inputId + '-preview');
+  const clearBtn = document.getElementById(inputId + '-clear');
+  const val = document.getElementById(inputId)?.value || '';
+  if (!preview) return;
+  if (!val) {
+    preview.style.display = 'none';
+    preview.innerHTML = '';
+    if (clearBtn) clearBtn.style.display = 'none';
+    return;
+  }
+  const isVideo  = val.startsWith('data:video') || /\.mp4(\?|$)/i.test(val);
+  const isBase64 = val.startsWith('data:');
+  const label    = isBase64 ? '📁 Uploaded file' : '🔗 URL preview';
+  if (isVideo) {
+    preview.innerHTML = `<video src="${val}" style="width:100%;max-height:150px;display:block;" muted playsinline></video><div class="media-preview-label">${label}</div>`;
+  } else {
+    preview.innerHTML = `<img src="${val}" onerror="this.parentElement.innerHTML='<div style=\\'padding:10px;font-size:12px;color:var(--danger);\\'>Could not load image</div>'" style="width:100%;max-height:150px;object-fit:contain;display:block;background:#fff;"><div class="media-preview-label">${label}</div>`;
+  }
+  preview.style.display = '';
+  if (clearBtn) clearBtn.style.display = '';
+}
+
+function clearMedia(inputId) {
+  const el = document.getElementById(inputId);
+  if (el) el.value = '';
+  updateMediaPreview(inputId);
 }
 
 /* ───── UTILS ───── */

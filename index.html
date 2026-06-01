@@ -1052,30 +1052,30 @@ body { font-family: 'Poppins', sans-serif; color: var(--text); overflow-x: hidde
         <p>Fill in your details and our counsellor will contact you within 2 hours.</p>
         <form onsubmit="handleSubmit(event)">
           <div class="form-row">
-            <div class="form-group"><label>Student's Full Name *</label><input type="text" placeholder="Enter full name" required></div>
-            <div class="form-group"><label>Parent's Name *</label><input type="text" placeholder="Enter parent's name" required></div>
+            <div class="form-group"><label>Student's Full Name *</label><input type="text" name="name" placeholder="Enter full name" required></div>
+            <div class="form-group"><label>Parent's Name *</label><input type="text" name="parentName" placeholder="Enter parent's name" required></div>
           </div>
           <div class="form-row">
-            <div class="form-group"><label>Mobile Number *</label><input type="tel" placeholder="+91 00000 00000" required></div>
-            <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com"></div>
+            <div class="form-group"><label>Mobile Number *</label><input type="tel" name="mobile" placeholder="+91 00000 00000" required></div>
+            <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="your@email.com"></div>
           </div>
           <div class="form-row">
             <div class="form-group"><label>Current Class *</label>
-              <select required>
+              <select name="class" required>
                 <option value="">Select Class</option>
                 <option>Class VIII</option><option>Class IX</option><option>Class X</option>
                 <option>Class XI</option><option>Class XII</option><option>Dropper</option>
               </select>
             </div>
             <div class="form-group"><label>Course Interested In *</label>
-              <select required>
+              <select name="course" required>
                 <option value="">Select Course</option>
                 <option>IIT JEE Main + Advanced</option><option>NEET (UG)</option>
                 <option>Foundation Course</option><option>Crash Course</option>
               </select>
             </div>
           </div>
-          <div class="form-group"><label>Message / Query</label><textarea placeholder="Any specific questions or requirements..."></textarea></div>
+          <div class="form-group"><label>Message / Query</label><textarea name="message" placeholder="Any specific questions or requirements..."></textarea></div>
           <button type="submit" class="form-submit"><i class="fas fa-paper-plane"></i> Submit Enquiry</button>
         </form>
       </div>
@@ -1197,16 +1197,48 @@ function toggleFaq(el) {
 }
 
 // Form submit
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
-  const btn = e.target.querySelector('.form-submit');
-  btn.innerHTML = '<i class="fas fa-check"></i> Enquiry Submitted! We\'ll call you within 2 hours.';
-  btn.style.background = '#10B981';
-  setTimeout(() => {
-    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Enquiry';
-    btn.style.background = '';
-    e.target.reset();
-  }, 5000);
+  const form = e.target;
+  const btn  = form.querySelector('.form-submit');
+  const data = {
+    name:       form.querySelector('[name="name"]').value.trim(),
+    parentName: form.querySelector('[name="parentName"]').value.trim(),
+    mobile:     form.querySelector('[name="mobile"]').value.trim(),
+    email:      form.querySelector('[name="email"]').value.trim(),
+    class:      form.querySelector('[name="class"]').value,
+    course:     form.querySelector('[name="course"]').value,
+    message:    form.querySelector('[name="message"]').value.trim()
+  };
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting…';
+  try {
+    const resp = await fetch('api.php?action=contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (resp.ok) {
+      btn.innerHTML = '<i class="fas fa-check"></i> Enquiry Submitted! We\'ll call you within 2 hours.';
+      btn.style.background = '#10B981';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Enquiry';
+        btn.style.background = '';
+        btn.disabled = false;
+        form.reset();
+      }, 5000);
+    } else {
+      throw new Error('server');
+    }
+  } catch {
+    btn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Submission failed — please try again.';
+    btn.style.background = '#EF4444';
+    btn.disabled = false;
+    setTimeout(() => {
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Enquiry';
+      btn.style.background = '';
+    }, 3500);
+  }
 }
 
 // Scroll reveal (simple)
