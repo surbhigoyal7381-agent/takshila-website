@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(curl -sI \"https://maps.app.goo.gl/nDtCXaNTZDtWfAi46\")"
     ]
   }
 }
