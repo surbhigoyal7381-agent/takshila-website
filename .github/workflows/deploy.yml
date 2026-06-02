@@ -33,7 +33,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /takshilajagadhri.com/
-          protocol: ftp
+          protocol: ftps
           port: 21
           exclude: |
             **/.git*
