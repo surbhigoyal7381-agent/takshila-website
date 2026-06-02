@@ -369,28 +369,88 @@ body { font-family: 'Poppins', sans-serif; color: var(--text); overflow-x: hidde
   .courses-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .about-badge-float.right, .about-badge-float.left { display: none; }
+  .why-image { min-height: 350px; }
 }
 @media (max-width: 768px) {
+  /* Nav */
   .nav-links { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fff; flex-direction: column; align-items: center; justify-content: center; gap: 6px; z-index: 999; }
   .nav-links.open { display: flex; }
   .nav-links a { font-size: 18px; }
   .nav-toggle { display: block; z-index: 1000; }
+  #topbar { display: none; }
+
+  /* Section padding reduction */
+  #hero { padding: 60px 0; min-height: auto; }
+  #stats, #about, #courses, #why, #results, #faculty, #testimonials, #programs, #gallery, #faq, #contact, #cta { padding: 60px 0; }
+
+  /* Grids */
   .testimonials-grid, .courses-grid, .programs-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .results-grid { grid-template-columns: repeat(2, 1fr); }
+  .faculty-grid { grid-template-columns: repeat(2, 1fr); }
+  .faq-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .contact-cards-row { grid-template-columns: 1fr 1fr; }
+
+  /* Gallery */
   .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
   .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
   .gallery-item:nth-child(4) { grid-column: span 1; }
-  .faq-grid { grid-template-columns: 1fr; }
+
+  /* Trust */
   .trust-grid { flex-direction: column; }
   .trust-divider { width: 100%; height: 1px; min-height: unset; }
   .trust-item { justify-content: flex-start; padding: 18px 20px; }
-  .contact-cards-row { grid-template-columns: 1fr 1fr; }
-  .contact-map-wrap { height: 320px; }
-  .form-row { grid-template-columns: 1fr; }
-  #topbar { display: none; }
-  .footer-grid { grid-template-columns: 1fr; }
-  .results-grid { grid-template-columns: repeat(2, 1fr); }
-  .faculty-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Map & form */
+  .contact-map-wrap { height: 300px; }
+  .contact-form { padding: 24px 18px; }
+  .faq-contact { padding: 28px 20px; }
+  .results-banner { padding: 24px 20px; }
+  .program-card { padding: 24px 20px; }
+  .hero-stats { gap: 16px; }
+  .results-year-tabs { flex-wrap: wrap; }
+}
+@media (max-width: 480px) {
+  /* All sections slim padding */
+  #hero { padding: 48px 0; }
+  #stats, #about, #courses, #why, #results, #faculty, #testimonials, #programs, #gallery, #faq, #contact, #cta { padding: 48px 0; }
+
+  /* Single column for remaining grids */
+  .contact-cards-row { grid-template-columns: 1fr; }
+  .about-features { grid-template-columns: 1fr; }
+  .why-cards { grid-template-columns: 1fr; }
+  .results-grid, .faculty-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Gallery full width */
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-item:nth-child(1) { grid-column: span 1; }
+  .gallery-item:nth-child(4) { grid-column: span 1; }
+
+  /* Reduce oversized padding in cards */
+  .stat-card { padding: 22px 16px; }
+  .why-card { padding: 20px; }
+  .hero-card-main { padding: 20px; }
+  .contact-form { padding: 20px 16px; }
+  .faq-contact { padding: 20px 16px; }
+
+  /* Hero stats stack nicely */
+  .hero-stats { gap: 14px; }
+  .hero-stat strong { font-size: 22px; }
+  .hero-divider { display: none; }
+
+  /* Buttons full width on very small screens */
+  .hero-actions { flex-direction: column; }
+  .hero-actions .btn-primary, .hero-actions .btn-outline-white { width: 100%; justify-content: center; }
+
+  /* Results banner stacks */
+  .results-banner { flex-direction: column; text-align: center; padding: 20px 16px; }
+
+  /* Font size adjustments */
+  .stat-number { font-size: 32px; }
+  .why-big-number { font-size: 60px; }
 }
 </style>
 </head>
