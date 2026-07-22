@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy | Takshila Institute Jagadhri</title>
+<meta name="description" content="Privacy Policy of Takshila Institute Jagadhri — how we collect, use, store and protect the personal information of students, parents and website visitors.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --navy: #1B3DA0;
+  --navy-dark: #0A1A5C;
+  --navy-mid: #162E84;
+  --orange: #CC2222;
+  --orange-light: #E04040;
+  --gold: #FFD700;
+  --white: #FFFFFF;
+  --light-bg: #F4F7FC;
+  --gray: #6B7280;
+  --border: #E5EAF2;
+  --text: #1A2340;
+  --success: #10B981;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+body { font-family: 'Poppins', sans-serif; color: var(--text); overflow-x: hidden; background: #fff; }
+
+/* ===== UTILITY ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: #fff; padding: 14px 30px; border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none; transition: all 0.3s; border: none; cursor: pointer; }
+.btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(204,34,34,0.35); }
+.btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--navy); padding: 13px 28px; border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none; border: 2px solid var(--navy); transition: all 0.3s; cursor: pointer; }
+.btn-secondary:hover { background: var(--navy); color: #fff; }
+
+/* ===== TOP BAR ===== */
+#topbar { background: var(--navy-dark); padding: 8px 0; }
+#topbar .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.topbar-left { display: flex; gap: 20px; }
+.topbar-item { color: rgba(255,255,255,0.75); font-size: 13px; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+.topbar-item i { color: var(--orange); font-size: 12px; }
+.topbar-item:hover { color: #fff; }
+.topbar-right { display: flex; gap: 10px; align-items: center; }
+.social-icon { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; transition: all 0.3s; }
+.social-icon:hover { background: var(--orange); color: #fff; }
+
+/* ===== NAVBAR ===== */
+#navbar { background: #fff; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.08); transition: all 0.3s; }
+#navbar .container { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+.logo img { height: 60px; object-fit: contain; }
+.nav-links { display: flex; list-style: none; gap: 4px; align-items: center; }
+.nav-links > li { position: relative; }
+.nav-links a { color: var(--navy); font-weight: 500; font-size: 14.5px; padding: 8px 14px; border-radius: 6px; text-decoration: none; display: block; transition: all 0.25s; }
+.nav-links a:hover, .nav-links a.active { color: var(--orange); background: rgba(204,34,34,0.07); }
+.nav-links .has-dropdown > a::after { content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 10px; margin-left: 5px; }
+.dropdown { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: #fff; min-width: 210px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.12); padding: 8px 0; z-index: 100; }
+.has-dropdown:hover .dropdown { display: block; }
+.dropdown a { font-size: 14px; padding: 10px 20px; color: var(--text); border-radius: 0; }
+.dropdown a:hover { color: var(--orange); background: rgba(204,34,34,0.05); padding-left: 26px; }
+.nav-cta { background: var(--orange); color: #fff !important; padding: 10px 22px !important; border-radius: 8px !important; font-weight: 600 !important; }
+.nav-cta:hover { background: var(--orange-light) !important; color: #fff !important; }
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+.nav-toggle span { display: block; width: 24px; height: 2px; background: var(--navy); margin: 5px 0; transition: 0.3s; }
+
+/* ===== PAGE HERO ===== */
+#page-hero { background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-mid) 55%, var(--navy) 100%); position: relative; overflow: hidden; padding: 72px 0 64px; border-bottom: 3px solid var(--orange); }
+#page-hero::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+.page-hero-glow { position: absolute; width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle, rgba(204,34,34,0.22) 0%, transparent 70%); top: -240px; right: -140px; pointer-events: none; }
+.page-hero-glow2 { position: absolute; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.07) 0%, transparent 70%); bottom: -200px; left: -100px; pointer-events: none; }
+.page-hero-inner { position: relative; z-index: 1; }
+.page-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(204,34,34,0.15); border: 1px solid rgba(204,34,34,0.4); color: #FF7B7B; font-size: 12.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 18px; border-radius: 30px; margin-bottom: 20px; }
+.page-title { font-size: clamp(30px, 4.5vw, 50px); font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: 16px; }
+.page-title span { color: var(--orange-light); }
+.page-desc { color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.8; max-width: 640px; }
+.breadcrumb { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 26px; font-size: 13.5px; }
+.breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; transition: 0.25s; }
+.breadcrumb a:hover { color: var(--orange-light); }
+.breadcrumb i { color: rgba(255,255,255,0.3); font-size: 10px; }
+.breadcrumb span { color: #fff; font-weight: 500; }
+.page-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.meta-chip { display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 16px; color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; }
+.meta-chip i { color: var(--gold); font-size: 13px; }
+
+/* ===== POLICY LAYOUT ===== */
+#policy { padding: 70px 0 90px; background: var(--light-bg); }
+.policy-layout { display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: start; }
+
+/* TOC */
+.toc { position: sticky; top: 100px; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px 20px; box-shadow: 0 4px 24px rgba(27,61,160,0.06); }
+.toc h4 { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.toc h4 i { color: var(--orange); font-size: 12px; }
+.toc ol { list-style: none; counter-reset: toc; max-height: calc(100vh - 240px); overflow-y: auto; }
+.toc ol::-webkit-scrollbar { width: 4px; }
+.toc ol::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.toc li { counter-increment: toc; }
+.toc a { display: flex; gap: 10px; align-items: baseline; font-size: 13.5px; line-height: 1.5; color: var(--gray); text-decoration: none; padding: 8px 10px; border-radius: 8px; border-left: 2px solid transparent; transition: all 0.25s; }
+.toc a::before { content: counter(toc); font-size: 11px; font-weight: 700; color: var(--border); flex-shrink: 0; min-width: 14px; }
+.toc a:hover { color: var(--navy); background: rgba(27,61,160,0.04); }
+.toc a.active { color: var(--orange); background: rgba(204,34,34,0.06); border-left-color: var(--orange); font-weight: 600; }
+.toc a.active::before { color: var(--orange); }
+
+/* Content card */
+.policy-content { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 48px 52px; box-shadow: 0 4px 30px rgba(27,61,160,0.06); }
+.policy-intro { font-size: 16.5px; line-height: 1.85; color: var(--text); padding: 24px 26px; background: linear-gradient(135deg, rgba(27,61,160,0.05), rgba(204,34,34,0.03)); border-left: 4px solid var(--navy); border-radius: 0 12px 12px 0; margin-bottom: 44px; }
+.policy-section { scroll-margin-top: 100px; padding-bottom: 40px; margin-bottom: 40px; border-bottom: 1px solid var(--border); }
+.policy-section:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.policy-section h2 { display: flex; align-items: center; gap: 14px; font-size: clamp(20px, 2.4vw, 25px); font-weight: 800; color: var(--navy); line-height: 1.3; margin-bottom: 20px; }
+.sec-num { flex-shrink: 0; width: 40px; height: 40px; border-radius: 11px; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; box-shadow: 0 4px 14px rgba(27,61,160,0.28); }
+.policy-section h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin: 26px 0 12px; }
+.policy-section p { font-size: 15.3px; line-height: 1.85; color: #414A66; margin-bottom: 14px; }
+.policy-section p:last-child { margin-bottom: 0; }
+.policy-section a { color: var(--orange); text-decoration: none; font-weight: 500; border-bottom: 1px solid rgba(204,34,34,0.3); transition: 0.25s; }
+.policy-section a:hover { border-bottom-color: var(--orange); }
+.policy-section strong { color: var(--text); font-weight: 600; }
+.policy-list { list-style: none; margin: 16px 0; }
+.policy-list li { position: relative; padding-left: 30px; font-size: 15.3px; line-height: 1.8; color: #414A66; margin-bottom: 12px; }
+.policy-list li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 3px; font-size: 11px; color: var(--orange); background: rgba(204,34,34,0.09); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.policy-list.dash li::before { content: '\f105'; background: rgba(27,61,160,0.08); color: var(--navy); }
+
+/* Data table */
+.table-wrap { overflow-x: auto; margin: 22px 0; border: 1px solid var(--border); border-radius: 12px; }
+table.data-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+table.data-table th { background: var(--navy-dark); color: #fff; font-size: 12.5px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; text-align: left; padding: 14px 18px; }
+table.data-table td { padding: 14px 18px; font-size: 14.4px; line-height: 1.7; color: #414A66; border-top: 1px solid var(--border); vertical-align: top; }
+table.data-table tbody tr:nth-child(even) { background: #FAFBFE; }
+table.data-table td:first-child { font-weight: 600; color: var(--navy); white-space: nowrap; }
+
+/* Callouts */
+.callout { display: flex; gap: 16px; padding: 20px 22px; border-radius: 14px; margin: 22px 0; border: 1px solid; }
+.callout i { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.callout p { margin: 0 !important; font-size: 14.6px !important; }
+.callout.info { background: rgba(27,61,160,0.05); border-color: rgba(27,61,160,0.18); }
+.callout.info i { color: var(--navy); }
+.callout.warn { background: rgba(204,34,34,0.05); border-color: rgba(204,34,34,0.2); }
+.callout.warn i { color: var(--orange); }
+.callout.good { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.24); }
+.callout.good i { color: var(--success); }
+
+/* Rights grid */
+.rights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 22px 0; }
+.right-card { background: #FAFBFE; border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: all 0.3s; }
+.right-card:hover { border-color: rgba(204,34,34,0.35); transform: translateY(-3px); box-shadow: 0 10px 26px rgba(27,61,160,0.08); }
+.right-card i { width: 38px; height: 38px; border-radius: 10px; background: rgba(204,34,34,0.1); color: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 13px; }
+.right-card strong { display: block; font-size: 14.8px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.right-card span { font-size: 13.6px; line-height: 1.7; color: var(--gray); }
+
+/* Grievance card */
+.grievance-card { background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-mid) 100%); border-radius: 18px; padding: 34px; margin-top: 24px; position: relative; overflow: hidden; }
+.grievance-card::after { content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(204,34,34,0.22) 0%, transparent 70%); top: -160px; right: -80px; }
+.grievance-card h3 { color: #fff !important; font-size: 18px; margin: 0 0 6px !important; position: relative; z-index: 1; }
+.grievance-card > p { color: rgba(255,255,255,0.6) !important; font-size: 14px !important; position: relative; z-index: 1; }
+.grievance-rows { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 22px; position: relative; z-index: 1; }
+.grievance-row { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; text-decoration: none; transition: all 0.3s; }
+.grievance-row:hover { background: rgba(255,255,255,0.11); transform: translateY(-2px); }
+.grievance-row i { width: 40px; height: 40px; border-radius: 10px; background: rgba(204,34,34,0.2); color: #FF8080; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.grievance-row div { min-width: 0; }
+.grievance-row small { display: block; color: rgba(255,255,255,0.5); font-size: 11.5px; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 3px; }
+.grievance-row b { color: #fff; font-size: 14.2px; font-weight: 600; word-break: break-word; }
+
+/* Back to top */
+.to-top { position: fixed; bottom: 100px; right: 30px; width: 46px; height: 46px; border-radius: 12px; background: var(--navy); color: #fff; border: none; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(12px); transition: all 0.3s; z-index: 998; box-shadow: 0 8px 24px rgba(10,26,92,0.3); }
+.to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+.to-top:hover { background: var(--orange); }
+
+/* ===== FOOTER ===== */
+#footer { background: var(--navy-dark); padding-top: 70px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 50px; }
+.footer-brand img { height: 50px; margin-bottom: 18px; }
+.footer-brand p { color: rgba(255,255,255,0.55); font-size: 14px; line-height: 1.75; max-width: 280px; margin-bottom: 22px; }
+.footer-social { display: flex; gap: 10px; }
+.footer-social a { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); font-size: 14px; text-decoration: none; transition: all 0.3s; }
+.footer-social a:hover { background: var(--orange); color: #fff; }
+.footer-col h4 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 18px; position: relative; padding-bottom: 12px; }
+.footer-col h4::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: var(--orange); }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { color: rgba(255,255,255,0.55); font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+.footer-col ul li a i { font-size: 10px; color: var(--orange); }
+.footer-col ul li a:hover { color: var(--orange); padding-left: 4px; }
+.footer-cert { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.cert-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 13px; color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 500; }
+.cert-badge i { color: var(--gold); font-size: 12px; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding: 20px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-bottom p { color: rgba(255,255,255,0.4); font-size: 13px; }
+.footer-bottom-links { display: flex; gap: 20px; }
+.footer-bottom-links a { color: rgba(255,255,255,0.4); font-size: 13px; text-decoration: none; }
+.footer-bottom-links a:hover, .footer-bottom-links a.active { color: var(--orange); }
+
+/* ===== FLOATING WHATSAPP ===== */
+.whatsapp-float { position: fixed; bottom: 30px; right: 30px; z-index: 999; }
+.whatsapp-float a { width: 58px; height: 58px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 26px; text-decoration: none; box-shadow: 0 8px 25px rgba(37,211,102,0.4); transition: all 0.3s; animation: pulse 2s infinite; }
+.whatsapp-float a:hover { transform: scale(1.1); }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.4); } 70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); } }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .policy-layout { grid-template-columns: 1fr; gap: 28px; }
+  .toc { position: static; }
+  .toc ol { max-height: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .policy-content { padding: 36px 32px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fff; flex-direction: column; align-items: center; justify-content: center; gap: 6px; z-index: 999; overflow-y: auto; }
+  .nav-links.open { display: flex; }
+  .nav-links a { font-size: 18px; }
+  .nav-toggle { display: block; z-index: 1000; }
+  #topbar { display: none; }
+  #page-hero { padding: 52px 0 46px; }
+  #policy { padding: 44px 0 60px; }
+  .policy-content { padding: 28px 22px; }
+  .policy-intro { padding: 18px 20px; font-size: 15.3px; margin-bottom: 32px; }
+  .toc ol { grid-template-columns: 1fr; }
+  .rights-grid, .grievance-rows { grid-template-columns: 1fr; }
+  .grievance-card { padding: 24px 20px; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-bottom-links { flex-wrap: wrap; justify-content: center; gap: 14px; }
+  .to-top { bottom: 96px; right: 22px; width: 42px; height: 42px; }
+}
+@media (max-width: 480px) {
+  #page-hero { padding: 42px 0 38px; }
+  .policy-content { padding: 24px 17px; }
+  .policy-section h2 { font-size: 19px; gap: 11px; }
+  .sec-num { width: 34px; height: 34px; font-size: 13px; border-radius: 9px; }
+  .policy-section p, .policy-list li { font-size: 14.6px; }
+  .meta-chip { font-size: 12px; padding: 9px 13px; }
+  .callout { flex-direction: column; gap: 10px; padding: 17px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="container">
+    <div class="topbar-left">
+      <a href="tel:+918901484127" class="topbar-item"><i class="fas fa-phone"></i> +91 89014 84127</a>
+      <a href="mailto:munish.goyal@takshilajagadhri.com" class="topbar-item"><i class="fas fa-envelope"></i> munish.goyal@takshilajagadhri.com</a>
+      <span class="topbar-item"><i class="fas fa-map-marker-alt"></i> 2203, Shri Nagar Colony, Jagadhri</span>
+    </div>
+    <div class="topbar-right">
+      <a href="https://apps.takshilajagadhri.com" target="_blank" rel="noopener" class="topbar-item" style="background:rgba(255,255,255,0.1);padding:5px 14px;border-radius:20px;font-weight:600;color:#fff;font-size:12px;border:1px solid rgba(255,255,255,0.2);transition:all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'"><i class="fas fa-sign-in-alt"></i> Student Login</a>
+      <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="container">
+    <a href="index.html" class="logo"><img src="FINALLOGO.png" alt="Takshila Institute Jagadhri"></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#about">About Us</a></li>
+      <li class="has-dropdown">
+        <a href="index.html#courses">Courses</a>
+        <div class="dropdown">
+          <a href="index.html#courses"><i class="fas fa-atom"></i> IIT JEE (Main + Advanced)</a>
+          <a href="index.html#courses"><i class="fas fa-dna"></i> NEET (UG)</a>
+          <a href="index.html#courses"><i class="fas fa-book-open"></i> Foundation (VIII–X)</a>
+          <a href="index.html#courses"><i class="fas fa-bolt"></i> Crash Course</a>
+        </div>
+      </li>
+      <li><a href="index.html#results">Results</a></li>
+      <li><a href="index.html#faculty">Faculty</a></li>
+      <li><a href="index.html#gallery">Gallery</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="index.html#contact" class="nav-cta">Enroll Now</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section id="page-hero">
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-glow2"></div>
+  <div class="container">
+    <div class="page-hero-inner">
+      <div class="page-badge"><i class="fas fa-shield-halved"></i> Your Privacy Matters</div>
+      <h1 class="page-title">Privacy <span>Policy</span></h1>
+      <p class="page-desc">Takshila Institute Jagadhri is trusted with the personal details of students and parents every day. This policy explains — in plain language — what we collect, why we collect it, who can see it, and the control you have over it.</p>
+      <div class="page-meta">
+        <div class="meta-chip"><i class="fas fa-calendar-check"></i> Last updated: 22 July 2026</div>
+        <div class="meta-chip"><i class="fas fa-gavel"></i> Aligned with India's DPDP Act, 2023</div>
+        <div class="meta-chip"><i class="fas fa-clock"></i> 6 min read</div>
+      </div>
+      <div class="breadcrumb">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <i class="fas fa-chevron-right"></i>
+        <span>Privacy Policy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POLICY -->
+<section id="policy">
+  <div class="container">
+    <div class="policy-layout">
+
+      <!-- TOC -->
+      <aside class="toc" aria-label="Table of contents">
+        <h4><i class="fas fa-list-ul"></i> On This Page</h4>
+        <ol id="tocList">
+          <li><a href="#s1">Who We Are</a></li>
+          <li><a href="#s2">Information We Collect</a></li>
+          <li><a href="#s3">How We Use Your Information</a></li>
+          <li><a href="#s4">Students Under 18</a></li>
+          <li><a href="#s5">Cookies &amp; Website Technology</a></li>
+          <li><a href="#s6">Third-Party Services</a></li>
+          <li><a href="#s7">When We Share Information</a></li>
+          <li><a href="#s8">Photographs &amp; Result Publicity</a></li>
+          <li><a href="#s9">How We Protect Your Data</a></li>
+          <li><a href="#s10">How Long We Keep It</a></li>
+          <li><a href="#s11">Your Rights &amp; Choices</a></li>
+          <li><a href="#s12">Calls, SMS &amp; WhatsApp</a></li>
+          <li><a href="#s13">Changes to This Policy</a></li>
+          <li><a href="#s14">Contact &amp; Grievances</a></li>
+        </ol>
+      </aside>
+
+      <!-- CONTENT -->
+      <article class="policy-content">
+
+        <p class="policy-intro">
+          At <strong>Takshila Institute Jagadhri</strong>, families share their most personal details with us — a student's name, a parent's phone number, a child's academic goals. We treat that information the way we would want our own family's information treated: collected only when needed, used only for the purpose it was given, and never sold to anyone. This policy applies to <strong>takshilajagadhri.com</strong>, our enquiry forms, and our student portal.
+        </p>
+
+        <!-- 1 -->
+        <div class="policy-section" id="s1">
+          <h2><span class="sec-num">1</span> Who We Are</h2>
+          <p>Takshila Institute Jagadhri ("Takshila", "we", "us" or "our") is a coaching institute preparing students for IIT JEE, NEET and school foundation examinations, operating since 1998 from Jagadhri, Yamuna Nagar, Haryana.</p>
+          <p>For the purposes of India's <strong>Digital Personal Data Protection Act, 2023</strong>, Takshila Institute Jagadhri is the <strong>Data Fiduciary</strong> — meaning we decide why and how your personal data is processed, and we are accountable for it. Our registered address and contact details are given in <a href="#s14">Section 14</a>.</p>
+          <p>By using this website, submitting an enquiry form, or enrolling with us, you agree to the practices described in this policy. If you do not agree with any part of it, please do not submit your information to us.</p>
+        </div>
+
+        <!-- 2 -->
+        <div class="policy-section" id="s2">
+          <h2><span class="sec-num">2</span> Information We Collect</h2>
+          <p>We deliberately keep data collection to a minimum. We do <strong>not</strong> ask for Aadhaar numbers, bank details, or any payment information through this website.</p>
+
+          <h3>a) Information you give us directly</h3>
+          <p>When you fill the enquiry or counselling form on our website, we collect exactly the following fields:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Information</th><th>Required?</th><th>Why we need it</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Student's full name</td><td>Required</td><td>To address the student correctly and maintain the enquiry record</td></tr>
+                <tr><td>Parent's / guardian's name</td><td>Required</td><td>Because most of our students are minors and counselling happens with parents</td></tr>
+                <tr><td>Mobile number</td><td>Required</td><td>To call or WhatsApp you back with counselling and admission details</td></tr>
+                <tr><td>Email address</td><td>Optional</td><td>To send course brochures, schedules and written follow-ups</td></tr>
+                <tr><td>Current class</td><td>Required</td><td>To recommend the right batch and course level</td></tr>
+                <tr><td>Course of interest</td><td>Required</td><td>To route the enquiry to the correct academic counsellor</td></tr>
+                <tr><td>Message / query</td><td>Optional</td><td>To answer the specific question you asked</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>We also collect the <strong>date and time</strong> your enquiry was submitted, so our counsellors know how fresh it is.</p>
+
+          <h3>b) Information collected at the centre</h3>
+          <p>If you proceed to admission, we collect further details offline at our centre — such as the school attended, previous academic marksheets, date of birth, residential address, and photographs for identity cards. These are collected on paper or in person, not through this website, and are governed by this same policy.</p>
+
+          <h3>c) Information collected automatically</h3>
+          <p>Like most websites, our hosting server automatically records basic technical information for security and reliability: IP address, browser type, device type, pages visited, and referring page. This is standard server log data and is not used to build a marketing profile of you.</p>
+
+          <div class="callout warn">
+            <i class="fas fa-triangle-exclamation"></i>
+            <p><strong>We never ask for payment details online.</strong> Takshila does not accept fees through this website. If you receive a call, message or link claiming to collect Takshila fees online, please verify it by calling us on <a href="tel:+918901484127">+91 89014 84127</a> before paying anything.</p>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="policy-section" id="s3">
+          <h2><span class="sec-num">3</span> How We Use Your Information</h2>
+          <p>We use the information you provide only for the purposes below — the purposes for which you gave it to us:</p>
+          <ul class="policy-list">
+            <li><strong>Responding to your enquiry</strong> — calling or messaging you back about courses, fees, batch timings and admission procedure.</li>
+            <li><strong>Free counselling</strong> — helping you or your child choose between IIT JEE, NEET, Foundation, Crash Course or Dropper batches.</li>
+            <li><strong>Admission processing</strong> — creating the student record, allotting a batch and issuing an identity card.</li>
+            <li><strong>Academic communication</strong> — sharing test schedules, results, parent-teacher meeting notices, holiday notices and study material updates.</li>
+            <li><strong>Parent updates</strong> — informing parents about attendance, test performance and progress of their ward.</li>
+            <li><strong>Improving our website and courses</strong> — understanding which courses students ask about most, in aggregate.</li>
+            <li><strong>Legal and safety obligations</strong> — meeting any requirement under applicable Indian law.</li>
+          </ul>
+          <div class="callout good">
+            <i class="fas fa-circle-check"></i>
+            <p><strong>What we will never do:</strong> we do not sell, rent or trade your personal information to any other coaching institute, publisher, lead-generation agency, advertiser or data broker. Ever.</p>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="policy-section" id="s4">
+          <h2><span class="sec-num">4</span> Students Under 18 (Children's Data)</h2>
+          <p>Most of the students we teach are below 18 years of age, and we take that responsibility seriously.</p>
+          <ul class="policy-list dash">
+            <li>Our enquiry form deliberately requires a <strong>parent's or guardian's name</strong> alongside the student's, because we expect enquiries for minors to be made or authorised by a parent.</li>
+            <li>If you are under 18, please do not submit the form yourself — ask your parent or guardian to fill it in, or to sit with you while you do.</li>
+            <li>In line with the DPDP Act, 2023, we process a child's personal data only with <strong>verifiable parental consent</strong>, and we obtain written consent from parents at the time of admission.</li>
+            <li>We do <strong>not</strong> use a child's personal data for behavioural advertising or tracking of any kind.</li>
+            <li>We do not undertake any processing that is likely to cause a detrimental effect on the well-being of a child.</li>
+          </ul>
+          <p>If you believe a child's information has reached us without parental consent, write to us at <a href="mailto:munish.goyal@takshilajagadhri.com">munish.goyal@takshilajagadhri.com</a> and we will delete it promptly.</p>
+        </div>
+
+        <!-- 5 -->
+        <div class="policy-section" id="s5">
+          <h2><span class="sec-num">5</span> Cookies &amp; Website Technology</h2>
+          <p>Our website is intentionally light on tracking. We do <strong>not</strong> place advertising cookies, retargeting pixels, or cross-site tracking scripts of our own.</p>
+          <p>However, some cookies may be set by the third-party services embedded on our pages — for example, the Google Maps panel on our contact section, or the YouTube videos in our gallery. These are set by those providers under their own privacy policies, and are listed in <a href="#s6">Section 6</a>.</p>
+          <p>You can block or delete cookies at any time through your browser settings. Our website will continue to work normally — only embedded maps and videos may be affected.</p>
+        </div>
+
+        <!-- 6 -->
+        <div class="policy-section" id="s6">
+          <h2><span class="sec-num">6</span> Third-Party Services We Use</h2>
+          <p>To keep the website fast and useful, we rely on a small number of well-known third-party services. When a page loads, your browser may connect directly to these providers, and they may receive your IP address and basic device information:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Service</th><th>Used for</th><th>What it may receive</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Google Fonts</td><td>Website typography</td><td>IP address, browser type</td></tr>
+                <tr><td>Google Maps</td><td>Showing our centre's location</td><td>IP address, map interactions</td></tr>
+                <tr><td>YouTube</td><td>Embedded gallery videos</td><td>IP address, video viewing data</td></tr>
+                <tr><td>Cloudflare CDN</td><td>Serving website icons</td><td>IP address, browser type</td></tr>
+                <tr><td>WhatsApp</td><td>Chat button &amp; enquiry replies</td><td>Your phone number &amp; chat content</td></tr>
+                <tr><td>Web hosting provider</td><td>Storing the website &amp; enquiry database</td><td>All data submitted through the form</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Each of these providers processes data under its own privacy policy. Clicking a social media icon or an external link takes you off our website — we are not responsible for the privacy practices of sites we do not operate.</p>
+          <div class="callout info">
+            <i class="fas fa-circle-info"></i>
+            <p>Our student portal at <strong>apps.takshilajagadhri.com</strong> is a separate login-protected system for enrolled students. Data there — attendance, test scores, study material access — is used purely for academic delivery and is visible only to the student, their parents, and authorised Takshila staff.</p>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="policy-section" id="s7">
+          <h2><span class="sec-num">7</span> When We Share Information</h2>
+          <p>Your information stays within Takshila. We share it outside the institute only in these limited situations:</p>
+          <ul class="policy-list dash">
+            <li><strong>With parents or guardians</strong> — a student's academic records, attendance and performance are always available to their parents.</li>
+            <li><strong>With our service providers</strong> — our hosting company and communication tools, strictly to run the services described above, and only to the extent necessary.</li>
+            <li><strong>With examination or affiliation bodies</strong> — where a student's details must be forwarded for a scholarship test, mock test series or official registration, with your knowledge.</li>
+            <li><strong>Where the law requires it</strong> — in response to a valid order from a court, law enforcement or government authority.</li>
+            <li><strong>To protect people</strong> — where sharing is genuinely necessary to protect the safety of a student, our staff or the public.</li>
+          </ul>
+          <p>Everyone at Takshila who handles student data is instructed to keep it confidential and to access it only when their role requires it.</p>
+        </div>
+
+        <!-- 8 -->
+        <div class="policy-section" id="s8">
+          <h2><span class="sec-num">8</span> Photographs, Results &amp; Publicity</h2>
+          <p>Like most institutes, we celebrate our students' achievements — on our website, in our gallery, on social media, and in print advertisements.</p>
+          <ul class="policy-list dash">
+            <li>We publish a successful student's <strong>name, photograph, rank and course</strong> only with the consent of the student and their parent or guardian.</li>
+            <li>Consent for publicity is obtained separately from consent for admission, and giving it is always optional — refusing it does not affect a student's classes, results or treatment in any way.</li>
+            <li>If you have previously agreed and now wish your photograph or result to be removed from our website or social media, write to <a href="mailto:munish.goyal@takshilajagadhri.com">munish.goyal@takshilajagadhri.com</a> and we will remove it from material we control as soon as reasonably possible.</li>
+            <li>Photographs taken at classroom sessions, seminars and events may show students in groups; please tell us in advance if you do not wish to appear in such photographs.</li>
+          </ul>
+        </div>
+
+        <!-- 9 -->
+        <div class="policy-section" id="s9">
+          <h2><span class="sec-num">9</span> How We Protect Your Data</h2>
+          <p>We take reasonable technical and organisational measures to keep your information safe:</p>
+          <ul class="policy-list">
+            <li>Our website is served over <strong>HTTPS</strong>, so information you type into the enquiry form is encrypted in transit.</li>
+            <li>Enquiries are stored in a database that is <strong>not publicly accessible</strong>; reading them requires an authenticated staff login.</li>
+            <li>Access to student and enquiry records is limited to authorised Takshila staff who need it for their work.</li>
+            <li>Database credentials are stored as protected secrets, never inside the public website code.</li>
+            <li>Physical records at our centre are kept in the administrative office with restricted access.</li>
+          </ul>
+          <p>That said, no method of transmission or storage over the internet is completely secure. While we work hard to protect your data, we cannot guarantee absolute security. If a personal data breach occurs, we will act promptly to contain it and inform affected persons and the relevant authority as required by law.</p>
+        </div>
+
+        <!-- 10 -->
+        <div class="policy-section" id="s10">
+          <h2><span class="sec-num">10</span> How Long We Keep Your Information</h2>
+          <p>We keep personal data only as long as it serves the purpose it was collected for:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Type of record</th><th>Kept for</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Website enquiries that did not lead to admission</td><td>Up to 24 months from submission, then deleted</td></tr>
+                <tr><td>Enrolled student academic records</td><td>Duration of the course plus a reasonable period afterwards, so that certificates and result verifications can be issued</td></tr>
+                <tr><td>Financial and fee records</td><td>As long as required under applicable tax and accounting law</td></tr>
+                <tr><td>Website server logs</td><td>Short term, as retained by our hosting provider</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>You may ask us to erase your data sooner — see <a href="#s11">Section 11</a>. We will honour the request unless a legal obligation requires us to retain the record.</p>
+        </div>
+
+        <!-- 11 -->
+        <div class="policy-section" id="s11">
+          <h2><span class="sec-num">11</span> Your Rights &amp; Choices</h2>
+          <p>Under the Digital Personal Data Protection Act, 2023, you have the following rights over your personal data. Parents may exercise these rights on behalf of their child.</p>
+          <div class="rights-grid">
+            <div class="right-card">
+              <i class="fas fa-eye"></i>
+              <strong>Right to Access</strong>
+              <span>Ask us what personal data of yours we hold and how it is being used.</span>
+            </div>
+            <div class="right-card">
+              <i class="fas fa-pen-to-square"></i>
+              <strong>Right to Correction</strong>
+              <span>Have inaccurate or incomplete details — a wrong phone number, a misspelt name — corrected or updated.</span>
+            </div>
+            <div class="right-card">
+              <i class="fas fa-trash-can"></i>
+              <strong>Right to Erasure</strong>
+              <span>Ask us to delete your data when it is no longer needed and no law requires us to keep it.</span>
+            </div>
+            <div class="right-card">
+              <i class="fas fa-ban"></i>
+              <strong>Right to Withdraw Consent</strong>
+              <span>Withdraw consent at any time — for example, to stop receiving course updates or to be removed from our calling list.</span>
+            </div>
+            <div class="right-card">
+              <i class="fas fa-comments"></i>
+              <strong>Right to Grievance Redressal</strong>
+              <span>Raise a complaint with us about how your data has been handled, and receive a response.</span>
+            </div>
+            <div class="right-card">
+              <i class="fas fa-user-shield"></i>
+              <strong>Right to Nominate</strong>
+              <span>Nominate another person to exercise these rights on your behalf in the event of death or incapacity.</span>
+            </div>
+          </div>
+          <p>To exercise any of these rights, email <a href="mailto:munish.goyal@takshilajagadhri.com">munish.goyal@takshilajagadhri.com</a> or call <a href="tel:+918901484127">+91 89014 84127</a> with your name, mobile number and what you would like us to do. We will verify your identity — to make sure we are not acting on someone else's request about your data — and respond within a reasonable time, ordinarily within 30 days.</p>
+          <p>Exercising these rights is free of charge.</p>
+        </div>
+
+        <!-- 12 -->
+        <div class="policy-section" id="s12">
+          <h2><span class="sec-num">12</span> Calls, SMS &amp; WhatsApp Communication</h2>
+          <p>When you submit the enquiry form, you are asking us to contact you — so our counsellors will call, message or WhatsApp you about the course you enquired about. That is the whole point of the form, and we usually respond within a couple of hours during working hours (Mon–Sat, 8 AM – 8 PM).</p>
+          <ul class="policy-list dash">
+            <li>We contact you about <strong>courses, admissions, tests and academic matters</strong> — not about unrelated products or offers from other companies.</li>
+            <li>You can ask us to stop calling or messaging at any time. Simply tell the counsellor, or email <a href="mailto:munish.goyal@takshilajagadhri.com">munish.goyal@takshilajagadhri.com</a> with "Do Not Contact" in the subject line.</li>
+            <li>If you stop enquiry communication but remain an enrolled student, we will still send <strong>essential academic notices</strong> — test dates, results, fee reminders and safety notices — since these are necessary to deliver the course.</li>
+            <li>Messages sent over WhatsApp travel through WhatsApp's own systems and are subject to its privacy policy.</li>
+          </ul>
+        </div>
+
+        <!-- 13 -->
+        <div class="policy-section" id="s13">
+          <h2><span class="sec-num">13</span> Changes to This Policy</h2>
+          <p>We may update this Privacy Policy from time to time — to reflect a change in how we work, a new service we introduce, or a change in the law. When we do, we will revise the "Last updated" date at the top of this page.</p>
+          <p>If a change materially affects how we use information you have already given us, we will make reasonable efforts to inform you directly. We encourage you to review this page occasionally. Continuing to use the website after an update means you accept the revised policy.</p>
+        </div>
+
+        <!-- 14 -->
+        <div class="policy-section" id="s14">
+          <h2><span class="sec-num">14</span> Contact Us &amp; Grievance Redressal</h2>
+          <p>If you have a question about this policy, want to exercise your rights, or wish to complain about how your personal data has been handled, please reach out. Every grievance is acknowledged and taken seriously.</p>
+
+          <div class="grievance-card">
+            <h3>Grievance &amp; Data Protection Contact</h3>
+            <p>Takshila Institute Jagadhri — Administration Office</p>
+            <div class="grievance-rows">
+              <a href="mailto:munish.goyal@takshilajagadhri.com" class="grievance-row">
+                <i class="fas fa-envelope"></i>
+                <div><small>Email us</small><b>munish.goyal@takshilajagadhri.com</b></div>
+              </a>
+              <a href="tel:+918901484127" class="grievance-row">
+                <i class="fas fa-phone"></i>
+                <div><small>Call us</small><b>+91 89014 84127</b></div>
+              </a>
+              <div class="grievance-row">
+                <i class="fas fa-location-dot"></i>
+                <div><small>Visit us</small><b>2203, Shri Nagar Colony, Jagadhri, Yamuna Nagar, Haryana</b></div>
+              </div>
+              <div class="grievance-row">
+                <i class="fas fa-clock"></i>
+                <div><small>Office hours</small><b>Monday – Saturday, 8 AM – 8 PM</b></div>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top:22px;">We aim to acknowledge every grievance within <strong>7 working days</strong> and resolve it within <strong>30 days</strong>. If you are not satisfied with our response, you may escalate the matter to the Data Protection Board of India under the Digital Personal Data Protection Act, 2023.</p>
+
+          <div class="callout info">
+            <i class="fas fa-scale-balanced"></i>
+            <p>This policy is governed by the laws of India. Any dispute arising out of it shall be subject to the exclusive jurisdiction of the courts at Yamuna Nagar, Haryana.</p>
+          </div>
+        </div>
+
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- BACK TO TOP -->
+<button class="to-top" id="toTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="FINALLOGO.png" alt="Takshila Institute Jagadhri">
+        <p>Takshila Institute has been shaping the futures of IIT JEE &amp; NEET aspirants since 1998. Join our legacy of 25,000+ selections across India.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-telegram"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="footer-cert">
+          <div class="cert-badge"><i class="fas fa-certificate"></i> Est. 1998</div>
+          <div class="cert-badge"><i class="fas fa-star"></i> 4.8 Rated</div>
+          <div class="cert-badge"><i class="fas fa-shield-alt"></i> Trusted Institute</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a href="index.html#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+          <li><a href="index.html#courses"><i class="fas fa-chevron-right"></i> Courses</a></li>
+          <li><a href="index.html#results"><i class="fas fa-chevron-right"></i> Results</a></li>
+          <li><a href="index.html#faculty"><i class="fas fa-chevron-right"></i> Faculty</a></li>
+          <li><a href="index.html#gallery"><i class="fas fa-chevron-right"></i> Gallery</a></li>
+          <li><a href="index.html#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Our Courses</h4>
+        <ul>
+          <li><a href="index.html#courses"><i class="fas fa-chevron-right"></i> IIT JEE Main</a></li>
+          <li><a href="index.html#courses"><i class="fas fa-chevron-right"></i> IIT JEE Advanced</a></li>
+          <li><a href="index.html#courses"><i class="fas fa-chevron-right"></i> NEET (UG)</a></li>
+          <li><a href="index.html#courses"><i class="fas fa-chevron-right"></i> Foundation (VIII–X)</a></li>
+          <li><a href="index.html#courses"><i class="fas fa-chevron-right"></i> Crash Course</a></li>
+          <li><a href="index.html#courses"><i class="fas fa-chevron-right"></i> Dropper Batch</a></li>
+          <li><a href="index.html#courses"><i class="fas fa-chevron-right"></i> Online Programs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><a href="index.html#contact"><i class="fas fa-map-marker-alt"></i> 2203, Shri Nagar Colony, Jagadhri</a></li>
+          <li><a href="tel:+918901484127"><i class="fas fa-phone"></i> +91 89014 84127</a></li>
+          <li><a href="mailto:munish.goyal@takshilajagadhri.com"><i class="fas fa-envelope"></i> munish.goyal@takshilajagadhri.com</a></li>
+          <li><a href="#"><i class="fas fa-clock"></i> Mon–Sat: 8AM – 8PM</a></li>
+          <li><a href="https://wa.me/918901484127"><i class="fab fa-whatsapp"></i> WhatsApp Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Takshila Institute Jagadhri. All Rights Reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="privacy-policy.html" class="active">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Refund Policy</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<div class="whatsapp-float">
+  <a href="https://wa.me/918901484127" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+</div>
+
+<script>
+// Mobile nav toggle
+const navToggle = document.getElementById('navToggle');
+const navLinks  = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+// TOC scroll-spy
+const tocLinks = [...document.querySelectorAll('#tocList a')];
+const sections = tocLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spy = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+  });
+}, { rootMargin: '-100px 0px -65% 0px', threshold: 0 });
+sections.forEach(s => spy.observe(s));
+
+// Back to top
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => toTop.classList.toggle('show', window.scrollY > 600), { passive: true });
+toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+</body>
+</html>
